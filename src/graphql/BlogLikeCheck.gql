@@ -1,0 +1,20 @@
+query BlogLikes($blogname: String, $num: Int){
+  BlogLikes(blog_name: $blogname, num: $num){
+    liked_count
+    liked_posts {
+      post_url
+      blog_name
+      summary
+      caption
+      timestamp
+      thumbnail_url
+      video_url
+      id
+      photos {original_size
+        {
+          url
+        }
+    }
+  }
+  }
+}

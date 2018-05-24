@@ -1,0 +1,35 @@
+query BlogPosts($blogname: String!, $num : Int!, $filter: String){
+  BlogPosts(blog_name:$blogname, offset: $num, type: $filter){
+    blog {
+      description
+      title
+      name
+      total_posts
+      updated
+      is_nsfw
+      share_likes
+      is_adult
+      followers
+      likes
+    }
+    posts{
+      post_url
+      caption
+      blog_name
+      summary
+      type
+      note_count
+      liked
+      timestamp
+      thumbnail_url
+      video_url
+      id
+      photos
+      {
+        original_size{
+          url
+        }
+      }
+    }
+  }
+}

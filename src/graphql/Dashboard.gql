@@ -1,0 +1,18 @@
+query Dashboard($num: Int, $method: String){
+  Dashboard(offset:$num, type: $method){
+    id
+    type
+    id
+    note_count
+    liked
+    timestamp
+    thumbnail_url
+    blog_name
+    summary
+    photos {
+      original_size {
+        url
+      }
+    }
+  }
+}

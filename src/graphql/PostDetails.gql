@@ -1,0 +1,33 @@
+query BlogPosts($blogname: String, $postid : Float, $filter: String, $notes_info: Boolean){
+  BlogPosts(blog_name: $blogname, id: $postid, filter: $filter, notes_info: $notes_info  ) {
+      blog {
+        title
+      }
+      posts {
+        summary
+        post_url
+        thumbnail_url
+        video_url
+        tags
+        timestamp
+        liked
+        caption
+        reblog_key
+        source_title
+        notes {
+          type
+          timestamp
+          blog_name
+          followed
+          blog_uuid
+        }
+        photos {
+          original_size {
+            height
+            width
+            url
+          }
+        }
+      }
+    }
+  }

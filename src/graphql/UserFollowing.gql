@@ -1,0 +1,13 @@
+query UserFollowing($num: Int) {
+  UserFollowing(offset: $num) {
+    blogs{
+      title
+      name
+      likes
+      share_likes
+      followers
+      updated
+      description
+    }
+  }
+}
