@@ -7,7 +7,7 @@
         blogname: this.$route.params.User,
         postid: this.$route.params.Postid,
         filter: this.$route.params.filter,
-        notes_info: true}"
+        notes_info: true,reblog_info: true}"
                   fetchPolicy="cache-first"
 >
       <template slot-scope="{ result: { loading, error, data } }">
@@ -18,18 +18,18 @@
           <b-alert show variant="danger"><icon name="ban"></icon>An error occured</b-alert>
         </div>
         <!-- Result -->
-        <div v-else-if="data" class="result apollo">
+        <div v-else-if="data" class="result apollo" style="padding-top: 38px">
           <a-card style="width: 100%" :title="data.BlogPosts.blog.title">
-                    <a-row type="flex" justify="start" align="top">
+                    <a-row type="flex" justify="start" align="top" style="padding-top: 15px">
           <a-card
           v-if="data.BlogPosts.posts['0'].summary"
-      style="width: 50%;height: 189.233px"
+      style="width: 50%;height: 140.233px"
           title="Post Summary:">
             <span>    {{data.BlogPosts.posts['0'].summary}}
 </span>
           </a-card>
           <a-card
-      style="width: 50%;height: 189.233px"
+      style="width: 50%;height: 140.233px"
           title="Posted  on:">
             <span>{{ data.BlogPosts.posts['0'].timestamp | moment("DD.MM.YYYY HH:MM") }}</span><br>
             <span>~ {{ tago(data.BlogPosts.posts['0'].timestamp) }}</span>
@@ -64,7 +64,9 @@
             :tags="data.BlogPosts.posts['0'].tags">
 </CardTagDetails><br>
 <CardNoteDetails v-if="data.BlogPosts.posts['0'].notes"
-            :notes="data.BlogPosts.posts['0'].notes">
+            :notes="data.BlogPosts.posts['0'].notes"
+            :reblogid="data.BlogPosts.posts['0'].reblogged_root_id"
+            :reblogname="data.BlogPosts.posts['0'].reblogged_root_name">
 </CardNoteDetails>
 </div>
     <!-- No result -->
@@ -74,10 +76,10 @@
   </div>
 </template>
 <script>
-import CardVidDetails from "../components/CardVidDetails.vue";
-import CardTagDetails from "../components/CardTagDetails.vue";
-import CardPicDetails from "../components/CardPicDetails.vue";
-import CardNoteDetails from "../components/CardNoteDetails.vue";
+import CardVidDetails from '../components/CardVidDetails.vue';
+import CardTagDetails from '../components/CardTagDetails.vue';
+import CardPicDetails from '../components/CardPicDetails.vue';
+import CardNoteDetails from '../components/CardNoteDetails.vue';
 
 export default {
   methods: {
@@ -88,14 +90,14 @@ export default {
     tago(value) {
       const val = this.$moment(value * 1000).fromNow();
       return val;
-    }
+    },
   },
   components: {
     CardVidDetails,
     CardPicDetails,
     CardTagDetails,
-    CardNoteDetails
-  }
+    CardNoteDetails,
+  },
 };
 </script>
 

@@ -14,18 +14,25 @@
 
         <!-- Error -->
         <div v-else-if="error" class="error apollo">
-          <b-alert show variant="danger"><icon name="ban"></icon>An error occured</b-alert>
+     <a-alert
+      type="error"
+      :message="error.message"
+      showIcon
+    />
         </div>
 
         <!-- Result -->
         <div v-else-if="data"   class="result apollo">
+                      <a-affix :offsetTop="50" >
+    <a-card style="width: 100%;padding-top: 10px; height: 85px">
                       <a-pagination       :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
       :defaultCurrent="$route.params.page * 1"
       @change="onChange"
       showQuickJumper
-      :total="roundnumber( data.UserLikes.liked_count/10)" /><br>
+      :total="roundnumber( data.UserLikes.liked_count/10)" /></a-card></a-affix><br>
                     <a-card style="width: 100%">
+                      <br>
 You <a-icon type="heart" />
      {{data.UserLikes.liked_count}} Posts<br>
                     </a-card><br>

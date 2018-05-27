@@ -25,7 +25,7 @@ Followed
 
 </a-menu>
     </a-layout-header>
-    <a-layout-content :style="{marginTop: '90px'}">
+    <a-layout-content style="width: 100%;padding-top: 34px !important; ">
     <router-view/>
         </a-layout-content>
 

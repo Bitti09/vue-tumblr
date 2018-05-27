@@ -4,22 +4,25 @@
     <ApolloQuery
       :query="require('../graphql/Dashboard.gql')"
       :variables="this.var1"
-                  fetchPolicy="cache-first">
-                        <template slot-scope="{ result: { loading, error, data } }">
-        <!-- Loading -->
-        <div v-if="loading" class="loading apollo">Loading...</div>
-        <!-- Error -->
-        <div v-else-if="error" class="error apollo">
-          <a-alert show variant="danger">An error occured</a-alert>
-        </div>
-        <!-- Result -->
-        <div v-else-if="data"  v-on="onChange1(data)" class="result apollo">
-            <a-pagination       :showTotal="total => `Total ${total} Pages`"
+      fetchPolicy="cache-first">
+    <template slot-scope="{ result: { loading, error, data } }">
+       <!-- Loading -->
+       <div v-if="loading" class="loading apollo">Loading...</div>
+       <!-- Error -->
+       <div v-else-if="error" class="error apollo">
+         <a-alert show variant="danger">An error occured</a-alert>
+       </div>
+       <!-- Result -->
+       <div v-else-if="data"  v-on="onChange1(data)" class="result apollo">
+                     <a-affix :offsetTop="50" >
+    <a-card style="width: 100%;padding-top: 10px; height: 85px">
+    <a-pagination
+      :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
       :defaultCurrent="$route.params.page*1"
       @change="onChange "
       showQuickJumper
-      :total="101" /><br>
+      :total="101" /></a-card></a-affix><br>
     <a-row type="flex" justify="start" align="top">
       <span v-for="post in data.Dashboard"  :key="post.index">
           <a-col :xl="10" >
@@ -57,7 +60,7 @@
   </div>
 </template>
 <script>
-import CardPics from "../components/CardPics.vue";
+import CardPics from '../components/CardPics.vue';
 
 export default {
   data() {
@@ -66,7 +69,7 @@ export default {
       filter1: this.$route.params.filter,
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1,
-      tstamp: ""
+      tstamp: '',
     };
   },
   methods: {
@@ -75,13 +78,13 @@ export default {
       return val;
     },
     checkfilter() {
-      if (this.$route.params.filter !== "all") {
+      if (this.$route.params.filter !== 'all') {
         this.var1 = {
           num: this.$route.params.page * 20,
-          method: this.$route.params.filter
+          method: this.$route.params.filter,
         };
       }
-      if (this.$route.params.filter === "all") {
+      if (this.$route.params.filter === 'all') {
         this.var1 = { num: this.$route.params.page * 20 };
       }
     },
@@ -94,15 +97,15 @@ export default {
         params: {
           page: pageNumber,
           filter: this.filter1,
-          User: this.blog1
-        }
+          User: this.blog1,
+        },
       });
     },
     onChange1(data) {
       // eslint-disable-next-line
       console.log(data.Dashboard[data.Dashboard.length - 1].timestamp);
       this.tstamp = data.Dashboard[data.Dashboard.length - 1].id;
-    }
+    },
   },
   // eslint-disable-next-line
   mounted: function() {
@@ -116,11 +119,11 @@ export default {
       this.checkfilter();
       // eslint-disable-next-line
       console.log(this.$route.params);
-    }
+    },
   },
   components: {
-    CardPics
-  }
+    CardPics,
+  },
 };
 </script>
 <style scoped>

@@ -23,12 +23,15 @@
         </div>
         <!-- Result -->
         <div v-else-if="data" v-on="onChange1(data)" class="result apollo">
+            <a-affix :offsetTop="50" >
+    <a-card style="width: 100%;padding-top: 10px; height: 85px">
             <a-pagination       :showTotal="total => `Total ${total} Pages`"
               showQuickJumper
       :pageSize="1"
       :defaultCurrent="$route.params.page * 1"
       @change="onChange"
       :total="roundnumber( data.BlogLikes.liked_count/20)" />
+          </a-card></a-affix>
 
                               <a-card style="width: 100%">
 "{{$route.params.User}}" <a-icon type="heart" />
@@ -71,7 +74,7 @@
 </template>
 
 <script>
-import CardPics from "../components/CardPics.vue";
+import CardPics from '../components/CardPics.vue';
 
 export default {
   data() {
@@ -80,7 +83,7 @@ export default {
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1,
       blogname: this.$route.params.User,
-      tstamp: "0"
+      tstamp: '0',
     };
   },
   methods: {
@@ -100,17 +103,17 @@ export default {
           page: pageNumber,
           filter: this.filter1,
           User: this.blog1,
-          tstamp: this.tstamp
-        }
+          tstamp: this.tstamp,
+        },
       });
     },
     onChange1(data) {
       console.log(
-        "1:",
+        '1:',
         data.BlogLikes.liked_posts[data.BlogLikes.liked_posts.length - 1]
           .timestamp
       );
-      console.log("2:", this.tstamp);
+      console.log('2:', this.tstamp);
       if (
         this.tstamp !=
         data.BlogLikes.liked_posts[data.BlogLikes.liked_posts.length - 1]
@@ -126,13 +129,13 @@ export default {
             data.BlogLikes.liked_posts.length - 1
           ].timestamp;
       }
-    }
+    },
   },
   // eslint-disable-next-line
   mounted: function() {},
   components: {
-    CardPics
-  }
+    CardPics,
+  },
 };
 </script>
 

@@ -1,12 +1,12 @@
 <template>
-  <div class="apollo-example">
+  <div class="apollo-example" >
     <!-- Apollo watched Graphql query -->
     <ApolloQuery
       :query="require('../graphql/BlogPosts.gql')"
       :variables="this.var1"
                   fetchPolicy="cache-first"
             >
-      <template slot-scope="{ result: { loading, error, data } }">
+      <template slot-scope="{ result: { loading, error, data } }" >
         <!-- Loading -->
         <div v-if="loading" class="loading apollo">Loading...</div>
         <!-- Error -->
@@ -14,26 +14,31 @@
           <b-alert show variant="danger">An error occured</b-alert>
         </div>
         <!-- Result -->
-        <div v-else-if="data" class="result apollo">
+        <div v-else-if="data" class="result apollo" >
+  <a-affix :offsetTop="50" >
+    <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
+
   <a-pagination       :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
       :defaultCurrent="$route.params.page * 1"
       @change="onChange"
       showQuickJumper
-      :total="roundnumber( data.BlogPosts.blog.total_posts/20)-1" /><br>
-          <a-card style="width: 100%">
+      :total="roundnumber( data.BlogPosts.blog.total_posts/20)-1" />
+          </a-card>
+</a-affix>
+          <a-card style="width: 100%, marginTop: '54px">
                       <a-card
           style="width: 100%"
           :title="data.BlogPosts.blog.title">
           </a-card>
         <a-row type="flex" justify="start" align="top">
            <a-card
-      style="width: 25%;height: 189.233px"
+      style="width: 20%;height: 189.233px"
           title="Blog Name:">
           <span>{{data.BlogPosts.blog.name}}</span>
           </a-card>
           <a-card
-      style="width: 25%;height: 189.233px"
+      style="width: 20%;height: 189.233px"
           title="Last Updated  on:">
           <span>{{ data.BlogPosts.blog.updated | moment("DD.MM.YYYY HH:MM") }}</span><br>
           <span>~ {{ tago(data.BlogPosts.blog.updated) }}</span>
@@ -41,7 +46,7 @@
 
           </a-card>
           <a-card
-      style="width: 25%;height: 189.233px"
+      style="width: 20%;height: 189.233px"
           title="Total No of Posts:">
           <span>{{ data.BlogPosts.blog.total_posts}}</span><br>
                <span v-if="data.BlogPosts.blog.total_posts > 1000">
@@ -49,13 +54,13 @@
      </span>
           </a-card>
                     <a-card
-      style="width: 25%;height: 189.233px"
-          title="Shares his Liked Posts ?">
+      style="width: 40%;height: 189.233px"
+          :title="blogshare(data.BlogPosts.blog.name)">
           <span v-if="data.BlogPosts.blog.share_likes">
          <router-link
            :to="{
              name: 'BlogLikes',
-             params: { User: $route.params.User , page: '0', filter: 'all' }}">
+             params: { User: $route.params.User , page: '0', tstamp: '0',filter: 'all' }}">
      <a-alert
       message="YES, view them"
       type="success"
@@ -67,7 +72,7 @@
       type="error"
       message="NO"
       showIcon
-    /></span><br>
+    ></a-alert></span><br>
 
           </a-card>
         </a-row>
@@ -174,6 +179,10 @@ export default {
     },
     tago(value) {
       const val = this.$moment(value * 1000).fromNow();
+      return val;
+    },
+    blogshare(value) {
+      const val = value + "\n\n liked Posts are public ?";
       return val;
     }
   },

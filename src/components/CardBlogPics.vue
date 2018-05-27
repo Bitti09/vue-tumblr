@@ -38,7 +38,13 @@
             </router-link>
             </li>
   </ul>
+        <ul class=" time ant-card-actions" >
+        <li style="width: 100%;">
+          <a-icon type="clock-circle-o" /> Posted {{this.timen1}}
+        </li>
+  </ul>
     <div v-if="summary" style="height: 6rem">
+
     <p > {{summary}}
 </p>
   </div>
@@ -50,6 +56,13 @@
   </a-card>
 </template>
 <style scoped>
+.time {
+  margin-top: -24px;
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e8e8e8;
+}
 </style>
 <script>
 export default {
@@ -63,6 +76,11 @@ export default {
     "summary",
     "timestamp",
     "video"
-  ]
+  ],
+  data() {
+    return {
+      timen1: this.$moment(this.timestamp * 1000).fromNow()
+    };
+  }
 };
 </script>

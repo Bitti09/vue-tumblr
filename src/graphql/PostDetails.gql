@@ -1,5 +1,5 @@
-query BlogPosts($blogname: String, $postid : Float, $filter: String, $notes_info: Boolean){
-  BlogPosts(blog_name: $blogname, id: $postid, filter: $filter, notes_info: $notes_info  ) {
+query BlogPosts($blogname: String, $postid: Float, $filter: String, $notes_info: Boolean, $reblog_info: Boolean) {
+  BlogPosts(blog_name: $blogname, id: $postid, filter: $filter, notes_info: $notes_info, reblog_info: $reblog_info) {
       blog {
         title
       }
@@ -14,6 +14,8 @@ query BlogPosts($blogname: String, $postid : Float, $filter: String, $notes_info
         caption
         reblog_key
         source_title
+        reblogged_root_id
+        reblogged_root_name
         notes {
           type
           timestamp
