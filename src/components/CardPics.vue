@@ -12,8 +12,13 @@
 
   />
     <ul class="ant-card-actions" slot="actions">
-    <li style="width: 25%;">
-<a-icon type="picture" /> {{piccount}}
+    <li v-if="!video" style="width: 25%;">
+<a-icon   type="picture" /> {{piccount}}
+
+</li>
+    <li  v-else  style="width: 25%;">
+<a-icon  type="video-camera" /> 1
+
 </li>
         <li style="width: 25%;">
           <a-icon type="message" /> {{notecount}}
@@ -22,7 +27,7 @@
               <router-link
         :to="{
           name: 'PostDetail',
-          params: { Postid: this.postid, User: this.blog_name , page: '0'}}">
+          params: { Postid: this.postid, User: this.blog_name , page: '1'}}">
           <a-icon type="caret-right" /> Details
               </router-link>
               </li>
@@ -30,7 +35,7 @@
             <router-link
       :to="{
         name: 'BlogPosts',
-        params: { User: blog_name , page: '0', filter: 'all' }}">
+        params: { User: blog_name , page: '1', filter: 'all' }}">
          <a-icon type="caret-right" /> Blog
             </router-link>
             </li>
@@ -42,8 +47,8 @@
         <a-avatar slot="avatar" :src="this.avatar" />
   </a-card-meta><br>
       <div v-if="summary" style="height: 6rem">
-    <p > {{summary}}
-</p>
+    <span style="overflow-wrap: break-word;">{{summary}}
+</span>
   </div>
   <div v-if="!summary" style="height: 6rem">
     <p>

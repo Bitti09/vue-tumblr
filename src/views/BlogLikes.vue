@@ -4,9 +4,10 @@
     <ApolloQuery
       :query="require('../graphql/BlogLikes.gql')"
       :variables="{
-        num: this.$route.params.tstamp,
+        num: (this.$route.params.page * 1 - 1) * 10,
         blogname: this.$route.params.User,
-        method: 'before',
+        method: 'offset',
+        limit: 10
       }"
     >
       <template slot-scope="{ result: { loading, error, data } }">
@@ -28,16 +29,23 @@
             <a-pagination       :showTotal="total => `Total ${total} Pages`"
               showQuickJumper
       :pageSize="1"
-      :defaultCurrent="$route.params.page * 1"
+      :current="$route.params.page * 1"
+      :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
-      :total="roundnumber( data.BlogLikes.liked_count/20)" />
-          </a-card></a-affix>
+      :total="101" />
+          </a-card></a-affix><br>
 
                               <a-card style="width: 100%">
 "{{$route.params.User}}" <a-icon type="heart" />
      {{data.BlogLikes.liked_count}} Posts<br>
-     ( ~ {{roundnumber( data.BlogLikes.liked_count/20)}} Pages )
-                    </a-card> <br>
+     ( ~ {{roundnumber( data.BlogLikes.liked_count/10)}} Pages )<br>
+       <a-alert
+       v-if="data.BlogLikes.liked_count > 1000"
+      type="warning"
+      message="currently only the 1000 recent Posts can be viewed on this page"
+      showIcon
+    />
+    </a-card> <br>
     <a-row type="flex" justify="start" align="top">
 
  <div  v-for="post in data.BlogLikes.liked_posts"  :key="post.index">
@@ -63,8 +71,11 @@
         </div>
     </a-row>
               <div v-if="data.BlogLikes.liked_posts.length === 0" >
-        <b-alert show variant="danger">No more liked Posts found</b-alert>
-</div>
+                                                    <a-alert
+      type="error"
+      message="No more liked Posts found"
+      showIcon
+    /></div>
 </div>
     <!-- No result -->
     <div v-else class="no-result apollo">No result :(</div>
@@ -81,7 +92,7 @@ export default {
     return {
       filter1: this.$route.params.filter,
       blog1: this.$route.params.User,
-      page1: this.$route.params.page * 1,
+      page1: this.$route.params.page * 1 - 1,
       blogname: this.$route.params.User,
       tstamp: "0"
     };
@@ -108,24 +119,7 @@ export default {
       });
     },
     onChange1(data) {
-      // eslint-disable-next-line
-      console.log(
-        "1:",
-        data.BlogLikes.liked_posts[data.BlogLikes.liked_posts.length - 1]
-          .timestamp
-      );
-      // eslint-disable-next-line
-      console.log('2:', this.tstamp);
-      if (
-        this.tstamp !=
-        data.BlogLikes.liked_posts[data.BlogLikes.liked_posts.length - 1]
-          .timestamp
-      ) {
-        // eslint-disable-next-line
-        console.log(
-          data.BlogLikes.liked_posts[data.BlogLikes.liked_posts.length - 1]
-            .timestamp
-        );
+      if (data.BlogLikes.liked_posts.length > 0) {
         this.tstamp =
           data.BlogLikes.liked_posts[
             data.BlogLikes.liked_posts.length - 1

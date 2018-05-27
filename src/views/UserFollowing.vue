@@ -4,23 +4,28 @@
     <ApolloQuery
       :query="require('../graphql/UserFollowing.gql')"
       :variables="this.var1"
-                  fetchPolicy="cache-first"
-    >
+      fetchPolicy="cache-first">
       <template slot-scope="{ result: { loading, error, data } }">
         <!-- Loading -->
         <div v-if="loading" class="loading apollo">Loading...</div>
-
         <!-- Error -->
         <div v-else-if="error" class="error apollo">
           <b-alert show variant="danger">An error occured</b-alert>
         </div>
-
         <!-- Result -->
-        <div v-else-if="data" class="result apollo" style="padding-top: 10px;">
-
-    <a-row type="flex" justify="start" align="top" style="padding-top: 30px;">
+        <div v-else-if="data" class="result apollo" style="padding-top: 5px;">
+                                <a-affix :offsetTop="50" >
+    <a-card style="width: 100%;padding-top: 10px; height: 80px">
+                      <a-pagination       :showTotal="total => `Total ${total} Pages`"
+      :pageSize="1"
+      :current="$route.params.page * 1"
+      :defaultCurrent="$route.params.page * 1-1"
+      @change="onChange"
+      showQuickJumper
+      :total="roundnumber( data.UserFollowing.total_blogs/10)" /></a-card></a-affix>
+    <a-row type="flex" justify="start" align="top" style="padding-top: 20px;">
         <div  v-for="post in data.UserFollowing.blogs"  :key="post.index">
-                    <a-col    >
+              <a-col>
 <CardFollow
         :title="post.title"
         :followers="post.followers"
@@ -47,7 +52,15 @@
     </ApolloQuery>
   </div>
 </template>
-
+<style scoped>
+.ant-card-body {
+  min-height: 150px !important;
+  max-height: 150px !important;
+}
+p {
+  margin-top: 6px !important;
+}
+</style>
 <script>
 import CardFollow from "../components/CardFollow.vue";
 
@@ -55,7 +68,7 @@ export default {
   data() {
     return {
       var1: {
-        num: this.$route.params.page * 20
+        num: (this.$route.params.page * 1 - 1) * 10
       }
     };
   },
@@ -66,11 +79,25 @@ export default {
     },
     checkfilter() {
       if (this.$route.params.filter !== "all") {
-        this.var1 = { num: this.$route.params.page * 20 };
+        this.var1 = { num: (this.$route.params.page * 1 - 1) * 10 };
       }
       if (this.$route.params.filter === "all") {
-        this.var1 = { num: this.$route.params.page * 20 };
+        this.var1 = { num: (this.$route.params.page * 1 - 1) * 10 };
       }
+    },
+    onChange(pageNumber) {
+      // eslint-disable-next-line
+      console.log('Page: ', pageNumber);
+      if (pageNumber === 1) {
+        this.tstamp = 0;
+      }
+      this.$router.push({
+        name: this.name1,
+        params: {
+          page: pageNumber,
+          tstamp: this.tstamp
+        }
+      });
     }
   },
   mounted() {

@@ -1,6 +1,6 @@
 <template>
   <a-card
-      style="width: 15rem;min-height:200.312px"
+      style="width: 15rem;max-height:200.312px"
 >
   <a-card-meta
     :title="blog_name"
@@ -8,37 +8,15 @@
     <a-avatar slot="avatar" :src="this.avatar" />
   </a-card-meta>
         <ul class="ant-card-actions" slot="actions">
-    <li style="width: 25%;">
-        <a-icon type="heart" /><span v-if="likes"> {{likes}}</span><span v-if="!likes">?</span>
-    </li>
-        <li style="width: 25%;">
-            <a-icon type="message"/>
-            <span v-if="followers"> {{followers}}</span>
-            <span v-if="!followers">?</span>
-    </li>
-            <li style="width: 25%;">
+
+            <li style="width: 100%;">
       <router-link
       :to="{
         name: 'BlogPosts',
-        params: { User: blog_name , page: '0', filter: 'all' }}">
-      <a-button size="small" content="Blog Posts" icon="left arrow" label-position="right" />
+        params: { User: blog_name , page: '1', filter: 'all' }}">
+      Blog Posts<a-icon type="caret-right"  color="grey" />
     </router-link>
             </li>
-                        <li style="width: 25%;">
-                <router-link
-    v-if="publicfollow"
-    :to="{
-      name: 'BlogLikes',
-      params: { User: $route.params.User , page: '0', filter: 'all' }}">
-    <a-button
-    primary
-    basic
-    size="small"
-    content="View them"
-    icon="right arrow"
-    label-position="right" />
-   </router-link>
-               </li>
     </ul>
     <span v-if="title" style="height: 6rem">
       <p>
@@ -52,9 +30,13 @@
     </span>
   </a-card>
 </template>
-<style>
+<style scoped>
 .ant-card-body {
-  min-height: 150px;
+  min-height: 155px !important;
+  max-height: 155px !important;
+}
+p {
+  margin-top: 6px !important;
 }
 </style>
 <script>

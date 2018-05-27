@@ -18,12 +18,15 @@
   <a-affix :offsetTop="50" >
     <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
 
-  <a-pagination       :showTotal="total => `Total ${total} Pages`"
+  <a-pagination
+  v-if="$route.params.filter == 'all' "
+       :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
-      :defaultCurrent="$route.params.page * 1"
+      :current="$route.params.page * 1"
+      :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
       showQuickJumper
-      :total="roundnumber( data.BlogPosts.blog.total_posts/20)-1" />
+      :total="roundnumber( data.BlogPosts.blog.total_posts/10)" />
           </a-card>
 </a-affix>
           <a-card style="width: 100%, marginTop: '54px">
@@ -42,16 +45,19 @@
           title="Last Updated  on:">
           <span>{{ data.BlogPosts.blog.updated | moment("DD.MM.YYYY HH:MM") }}</span><br>
           <span>~ {{ tago(data.BlogPosts.blog.updated) }}</span>
-               ( ~ {{roundnumber( data.BlogPosts.blog.total_posts/20)}} Pages )
-
           </a-card>
           <a-card
       style="width: 20%;height: 189.233px"
           title="Total No of Posts:">
           <span>{{ data.BlogPosts.blog.total_posts}}</span><br>
+          ( ~ {{roundnumber( data.BlogPosts.blog.total_posts/10)}} Pages )
+
                <span v-if="data.BlogPosts.blog.total_posts > 1000">
        (currently only the 2000 recent Posts can be viewed on this page)
      </span>
+               <a-alert v-if="$route.params.filter != 'all'" type="error"
+      message="Page Numbers  aren't acurate due to active filtering" showIcon></a-alert>
+
           </a-card>
                     <a-card
       style="width: 40%;height: 189.233px"
@@ -77,6 +83,7 @@
           </a-card>
         </a-row>
       <a-card
+      v-if="data.BlogPosts.blog.description"
       style="width: 100%"
           title="Blog Description:">
           <span v-html="data.BlogPosts.blog.description"></span>
@@ -84,7 +91,7 @@
 </a-card>
 <br>
     <a-row type="flex" justify="start" align="top">
-        <div  v-for="post in data.BlogPosts.posts"  :key="post.index">
+        <div  v-for="(post, index) in test11(data.BlogPosts.posts)" :key="index">
                     <a-col :xl="10" >
 <CardBlogPics v-if="post.type ==='photo'"
         :picurl="post.photos['0'].original_size.url"
@@ -96,7 +103,7 @@
         :summary="post.summary"
         :timestamp="post.timestamp"
         :video="0" />
-        <CardBlogPics v-if="post.type ==='video'"
+        <CardBlogPics v-if="post.type ==='video' && post.thumbnail_url"
                 :picurl="post.thumbnail_url"
                 :notecount="post.note_count"
                 :piccount="1"
@@ -125,17 +132,16 @@
 </template>
 <script>
 import CardBlogPics from "../components/CardBlogPics.vue";
-
+import _ from "lodash";
 export default {
   data() {
     return {
       filter1: this.$route.params.filter,
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1,
-      num: this.$route.params.page * 20,
       blogname: this.$route.params.User,
       var1: {
-        num: this.$route.params.page * 20,
+        num: (this.$route.params.page * 1 - 1) * 10,
         blogname: this.$route.params.User
       },
       errormsg: `${this.$route.params.User} has no public liked Posts`,
@@ -149,14 +155,14 @@ export default {
     checkfilter() {
       if (this.$route.params.filter !== "all") {
         this.var1 = {
-          num: this.$route.params.page * 20,
+          num: (this.$route.params.page * 1 - 1) * 10,
           filter: this.$route.params.filter,
           blogname: this.$route.params.User
         };
       }
       if (this.$route.params.filter === "all") {
         this.var1 = {
-          num: this.$route.params.page * 20,
+          num: (this.$route.params.page * 1 - 1) * 10,
           blogname: this.$route.params.User
         };
       }
@@ -184,11 +190,20 @@ export default {
     blogshare(value) {
       const val = value + "\n\n liked Posts are public ?";
       return val;
+    },
+    test11(value) {
+      const val = _.sortBy(value, "timestamp").reverse();
+      return val;
     }
   },
   // eslint-disable-next-line
   mounted: function() {
     this.checkfilter();
+  },
+  computed: {
+    pagenum() {
+      return this.$route.params.page * 1 - 1;
+    }
   },
   watch: {
     // eslint-disable-next-line

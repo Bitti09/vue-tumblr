@@ -25,7 +25,7 @@
               <router-link
         :to="{
           name: 'PostDetail',
-          params: { Postid: this.postid, User: this.blog_name , page: '0'}}">
+          params: { Postid: this.postid, User: this.blog_name , page: '1'}}">
           <a-icon type="caret-right" /> Details
               </router-link>
               </li>
@@ -33,7 +33,7 @@
             <router-link
       :to="{
         name: 'BlogPosts',
-        params: { User: blog_name , page: '0', filter: 'all' }}">
+        params: { User: blog_name , page: '1', filter: 'all' }}">
          <a-icon type="caret-right" /> Blog
             </router-link>
             </li>

@@ -1,5 +1,6 @@
 query UserFollowing($num: Int) {
   UserFollowing(offset: $num) {
+    total_blogs
     blogs{
       title
       name

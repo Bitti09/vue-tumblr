@@ -13,7 +13,7 @@ export default new Router({
   routes: [
     {
       path: "/Following/",
-      redirect: "/Following/0"
+      redirect: "/Following/1"
     },
     {
       path: "/Following/:page",
@@ -23,7 +23,7 @@ export default new Router({
     },
     {
       path: "/Dashboard/:filter/",
-      redirect: "/Dashboard/:filter/0"
+      redirect: "/Dashboard/:filter/1"
     },
     {
       path: "/Dashboard/:filter/:page",
@@ -33,7 +33,7 @@ export default new Router({
     },
     {
       path: "/PostDetail/:User/:Postid/",
-      redirect: "/PostDetail/:User/:Postid/0"
+      redirect: "/PostDetail/:User/:Postid/1"
     },
     {
       path: "/PostDetail/:User/:Postid/:page",
@@ -47,7 +47,7 @@ export default new Router({
     },
     {
       path: "/BlogPosts/:User/:filter/",
-      redirect: "/BlogPosts/:User/:filter/0"
+      redirect: "/BlogPosts/:User/:filter/1"
     },
     {
       path: "/BlogPosts/:User/:filter/:page",
@@ -57,20 +57,20 @@ export default new Router({
     },
     {
       path: "/BlogLikes/:User/",
-      redirect: "/BlogLikes/:User/0/0"
+      redirect: "/BlogLikes/:User/1/"
     },
     {
-      path: "/BlogLikes/:User/:page/:tstamp",
+      path: "/BlogLikes/:User/:page/",
       name: "BlogLikes",
       component: BlogLikes,
       props: true
     },
     {
       path: "/",
-      redirect: "/0/0"
+      redirect: "/1/"
     },
     {
-      path: "/:page/:tstamp",
+      path: "/:page/",
       name: "Home",
       component: Home,
       props: false

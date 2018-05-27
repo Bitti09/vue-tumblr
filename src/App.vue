@@ -16,7 +16,8 @@
 <a-menu-item key="follow">
 Followed
 </a-menu-item>
-  <a-sub-menu>
+  <a-sub-menu
+  v-if="this.$route.name == 'BlogPosts'">
     <span slot="title">Filter</span>
       <a-menu-item key="filteroff">No Filter</a-menu-item>
       <a-menu-item key="filterpic">Pics only</a-menu-item>
@@ -30,7 +31,6 @@ Followed
         </a-layout-content>
 
         </a-layout>
-
   </div>
 </template>
 
@@ -54,6 +54,9 @@ export default {
   data() {
     return {
       user: "",
+      ModalText: "Content of the modal",
+      visible: false,
+      confirmLoading: false,
       page1: this.$route.params.page * 1,
       name1: this.$route.name,
       filter1: this.$route.params.filter,
@@ -61,90 +64,54 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    onSearch(value) {
       // eslint-disable-next-line
-      console.log(this);
+      console.log(value);
       this.$router.push({
         name: "BlogPosts",
         params: {
           filter: "all",
-          page: 0,
-          User: this.user
+          page: 1,
+          User: value
         }
       });
       this.user = "";
     },
-    indexnew({ item, key, keyPath }) {
+    indexnew({ item, key, keyPath, value }) {
       // eslint-disable-next-line
-      console.log({ item, key, keyPath });
+      console.log({ item, key, keyPath, value });
       switch (key) {
         default:
-          this.page1 = 0;
           this.$router.push({
             name: "Dashboard",
             params: {
-              page: 0,
+              page: 1,
               filter: "all"
             }
           });
           break;
         case "dash":
-          this.page1 = 0;
           this.$router.push({
             name: "Dashboard",
             params: {
-              page: 0,
+              page: 1,
               filter: "all"
             }
           });
           break;
         case "index":
-          this.page1 = 0;
           this.$router.push({
             name: "Home",
             params: {
-              page: 0
+              page: 1
             }
           });
           break;
-        case "prev":
-          if (this.page1 > 0) {
-            this.page1 -= 1;
-            this.$router.push({
-              name: this.name1,
-              params: {
-                page: this.page1,
-                filter: this.filter1,
-                User: this.blog1
-              }
-            });
-          }
-          break;
-        case "start":
-          this.page1 = 0;
-          this.$router.push({
-            name: this.name1,
-            params: {
-              page: 0,
-              filter: this.filter1,
-              User: this.blog1
-            }
-          });
-          break;
-        case "next":
-          // eslint-disable-next-line
-          this.page1 += 1;
-          this.$router.push({
-            name: this.name1,
-            params: {
-              page: this.page1,
-              filter: this.filter1,
-              User: this.blog1
-            }
-          });
+        case "search":
+          // ss
+          this.visible = true;
           break;
         case "follow":
-          this.page1 = 0;
           // eslint-disable-next-line
           console.log(item.selectedKeys);
           item.selectedKeys.length = 0;
@@ -153,7 +120,7 @@ export default {
           this.$router.push({
             name: "Following",
             params: {
-              page: 0
+              page: 1
             }
           });
           break;
@@ -164,7 +131,7 @@ export default {
             params: {
               User: this.$route.params.User,
               page: this.$route.params.page * 1,
-              filter: "video"
+              filter: "all"
             }
           });
           break;
@@ -191,6 +158,17 @@ export default {
           });
           break;
       }
+    },
+    handleOk() {
+      this.ModalText = "The modal will be closed after two seconds";
+      this.confirmLoading = true;
+      setTimeout(() => {
+        this.visible = false;
+        this.confirmLoading = false;
+      }, 2000);
+    },
+    handleCancel() {
+      this.visible = false;
     },
     keymonitor(event) {
       // eslint-disable-next-line

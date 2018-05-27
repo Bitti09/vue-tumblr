@@ -4,7 +4,7 @@
     <ApolloQuery
       :query="require('../graphql/UserLikes.gql')"
       :variables="{
-        num: this.$route.params.page *10,
+        num: (this.$route.params.page * 1 - 1) *10,
         limit: '10',
         method: 'offset' }"
       >
@@ -27,7 +27,8 @@
     <a-card style="width: 100%;padding-top: 10px; height: 85px">
                       <a-pagination       :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
-      :defaultCurrent="$route.params.page * 1"
+      :current="$route.params.page * 1"
+      :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
       showQuickJumper
       :total="roundnumber( data.UserLikes.liked_count/10)" /></a-card></a-affix><br>

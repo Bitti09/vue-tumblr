@@ -19,7 +19,8 @@
     <a-pagination
       :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
-      :defaultCurrent="$route.params.page*1"
+      :current="$route.params.page * 1"
+      :defaultCurrent="$route.params.page * 1-1"
       @change="onChange "
       showQuickJumper
       :total="101" /></a-card></a-affix><br>
@@ -80,12 +81,12 @@ export default {
     checkfilter() {
       if (this.$route.params.filter !== "all") {
         this.var1 = {
-          num: this.$route.params.page * 20,
+          num: (this.$route.params.page * 1 - 1) * 10,
           method: this.$route.params.filter
         };
       }
       if (this.$route.params.filter === "all") {
-        this.var1 = { num: this.$route.params.page * 20 };
+        this.var1 = { num: (this.$route.params.page * 1 - 1) * 10 };
       }
     },
     onChange(pageNumber) {

@@ -19,8 +19,8 @@
         </div>
         <!-- Result -->
         <div v-else-if="data" class="result apollo" style="padding-top: 38px">
-          <a-card style="width: 100%" :title="data.BlogPosts.blog.title">
-                    <a-row type="flex" justify="start" align="top" style="padding-top: 15px">
+          <a-card style="width: 100%;margin-top:10px;max-height: 430px" :title="data.BlogPosts.blog.title">
+                    <a-row type="flex" justify="start" align="top" style="width: 105.7%;margin-top:-24px;left:-32px;position:relative;">
           <a-card
           v-if="data.BlogPosts.posts['0'].summary"
       style="width: 50%;height: 140.233px"
@@ -33,12 +33,11 @@
           title="Posted  on:">
             <span>{{ data.BlogPosts.posts['0'].timestamp | moment("DD.MM.YYYY HH:MM") }}</span><br>
             <span>~ {{ tago(data.BlogPosts.posts['0'].timestamp) }}</span>
-          </a-card></a-row>
-                    <a-card
-          v-if="data.BlogPosts.posts['0'].caption"
-      style="width: 100%"
-          title="Post Caption:">
-            <p v-html="data.BlogPosts.posts['0'].caption"></p>
+          </a-card></a-row><br>
+          <a-card
+            v-if="data.BlogPosts.posts['0'].caption"
+            style="width: 105.7%;margin-top:0px;left:-32px;position:relative;" title="Post Caption:">
+          <p v-html="data.BlogPosts.posts['0'].caption"></p>
           </a-card>
 </a-card><br>
     <a-row type="flex" justify="start" align="top">
