@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import CardPics from '../components/CardPics.vue';
+import CardPics from "../components/CardPics.vue";
 
 export default {
   data() {
@@ -69,7 +69,7 @@ export default {
       filter1: this.$route.params.filter,
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1,
-      tstamp: '',
+      tstamp: ""
     };
   },
   methods: {
@@ -78,13 +78,13 @@ export default {
       return val;
     },
     checkfilter() {
-      if (this.$route.params.filter !== 'all') {
+      if (this.$route.params.filter !== "all") {
         this.var1 = {
           num: this.$route.params.page * 20,
-          method: this.$route.params.filter,
+          method: this.$route.params.filter
         };
       }
-      if (this.$route.params.filter === 'all') {
+      if (this.$route.params.filter === "all") {
         this.var1 = { num: this.$route.params.page * 20 };
       }
     },
@@ -97,15 +97,15 @@ export default {
         params: {
           page: pageNumber,
           filter: this.filter1,
-          User: this.blog1,
-        },
+          User: this.blog1
+        }
       });
     },
     onChange1(data) {
       // eslint-disable-next-line
       console.log(data.Dashboard[data.Dashboard.length - 1].timestamp);
       this.tstamp = data.Dashboard[data.Dashboard.length - 1].id;
-    },
+    }
   },
   // eslint-disable-next-line
   mounted: function() {
@@ -119,11 +119,11 @@ export default {
       this.checkfilter();
       // eslint-disable-next-line
       console.log(this.$route.params);
-    },
+    }
   },
   components: {
-    CardPics,
-  },
+    CardPics
+  }
 };
 </script>
 <style scoped>

@@ -60,22 +60,22 @@
 <script>
 export default {
   props: [
-    'likes',
-    'title',
-    'followers',
-    'liked',
-    'blog_name',
-    'summary',
-    'timestamp',
-    'publicfollow',
+    "likes",
+    "title",
+    "followers",
+    "liked",
+    "blog_name",
+    "summary",
+    "timestamp",
+    "publicfollow"
   ],
   data() {
     return {
       avatar: `https://api.tumblr.com/v2/blog/${
         this.blog_name
       }.tumblr.com/avatar/40`,
-      timen1: this.$moment(this.timestamp * 1000).fromNow(),
+      timen1: this.$moment(this.timestamp * 1000).fromNow()
     };
-  },
+  }
 };
 </script>

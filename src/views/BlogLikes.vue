@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import CardPics from '../components/CardPics.vue';
+import CardPics from "../components/CardPics.vue";
 
 export default {
   data() {
@@ -83,7 +83,7 @@ export default {
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1,
       blogname: this.$route.params.User,
-      tstamp: '0',
+      tstamp: "0"
     };
   },
   methods: {
@@ -103,16 +103,18 @@ export default {
           page: pageNumber,
           filter: this.filter1,
           User: this.blog1,
-          tstamp: this.tstamp,
-        },
+          tstamp: this.tstamp
+        }
       });
     },
     onChange1(data) {
+      // eslint-disable-next-line
       console.log(
-        '1:',
+        "1:",
         data.BlogLikes.liked_posts[data.BlogLikes.liked_posts.length - 1]
           .timestamp
       );
+      // eslint-disable-next-line
       console.log('2:', this.tstamp);
       if (
         this.tstamp !=
@@ -129,13 +131,13 @@ export default {
             data.BlogLikes.liked_posts.length - 1
           ].timestamp;
       }
-    },
+    }
   },
   // eslint-disable-next-line
   mounted: function() {},
   components: {
-    CardPics,
-  },
+    CardPics
+  }
 };
 </script>
 

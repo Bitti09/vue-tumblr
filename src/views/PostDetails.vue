@@ -76,10 +76,10 @@
   </div>
 </template>
 <script>
-import CardVidDetails from '../components/CardVidDetails.vue';
-import CardTagDetails from '../components/CardTagDetails.vue';
-import CardPicDetails from '../components/CardPicDetails.vue';
-import CardNoteDetails from '../components/CardNoteDetails.vue';
+import CardVidDetails from "../components/CardVidDetails.vue";
+import CardTagDetails from "../components/CardTagDetails.vue";
+import CardPicDetails from "../components/CardPicDetails.vue";
+import CardNoteDetails from "../components/CardNoteDetails.vue";
 
 export default {
   methods: {
@@ -90,14 +90,14 @@ export default {
     tago(value) {
       const val = this.$moment(value * 1000).fromNow();
       return val;
-    },
+    }
   },
   components: {
     CardVidDetails,
     CardPicDetails,
     CardTagDetails,
-    CardNoteDetails,
-  },
+    CardNoteDetails
+  }
 };
 </script>
 

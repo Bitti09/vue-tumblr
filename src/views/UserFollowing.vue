@@ -49,14 +49,14 @@
 </template>
 
 <script>
-import CardFollow from '../components/CardFollow.vue';
+import CardFollow from "../components/CardFollow.vue";
 
 export default {
   data() {
     return {
       var1: {
-        num: this.$route.params.page * 20,
-      },
+        num: this.$route.params.page * 20
+      }
     };
   },
   methods: {
@@ -65,13 +65,13 @@ export default {
       return val;
     },
     checkfilter() {
-      if (this.$route.params.filter !== 'all') {
+      if (this.$route.params.filter !== "all") {
         this.var1 = { num: this.$route.params.page * 20 };
       }
-      if (this.$route.params.filter === 'all') {
+      if (this.$route.params.filter === "all") {
         this.var1 = { num: this.$route.params.page * 20 };
       }
-    },
+    }
   },
   mounted() {
     this.checkfilter();
@@ -84,11 +84,11 @@ export default {
       this.checkfilter();
       // eslint-disable-next-line
       console.log(this.$route.params);
-    },
+    }
   },
   components: {
-    CardFollow,
-  },
+    CardFollow
+  }
 };
 </script>
 
