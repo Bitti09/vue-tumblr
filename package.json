@@ -12,8 +12,8 @@
     "register-service-worker": "^1.0.0",
     "v-img": "^0.2.0",
     "vue": "^2.5.16",
-    "vue-antd-ui": "^0.5.1",
-    "vue-apollo": "^3.0.0-beta.10",
+    "vue-antd-ui": "^0.5.4",
+    "vue-apollo": "^3.0.0-beta.14",
     "vue-moment": "^4.0.0-0",
     "vue-plyr": "^3.0.0",
     "vue-router": "^3.0.1",
@@ -27,7 +27,7 @@
     "@vue/eslint-config-prettier": "^3.0.0-beta.11",
     "eslint-plugin-graphql": "^2.1.1",
     "graphql-tag": "^2.5.0",
-    "vue-cli-plugin-apollo": "^0.10.4",
+    "vue-cli-plugin-apollo": "^0.12.1",
     "vue-template-compiler": "^2.5.16"
   },
   "eslintConfig": {
@@ -35,10 +35,7 @@
     "env": {
       "node": true
     },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/prettier"
-    ],
+    "extends": ["plugin:vue/essential", "@vue/prettier"],
     "parserOptions": {
       "parser": "babel-eslint"
     }
@@ -48,9 +45,5 @@
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }
