@@ -26,9 +26,9 @@ Tumblr api -> graphql Server ( will upload my little script later)
  		- Blog Likes(if public): #/BlogLikes/:blogname/:pageno
 
 - Url Parameters:
-  - `filter` all / photo / video
+  - `:filter` all / photo / video
   - `:pageno` : 1-101 (until i switched all needed parts to timestamp based) 
-  - `blogname`: same as in the blog tumblr url -> test123.tumblr.com = test123
+  - `:blogname`: same as in the blog tumblr url -> test123.tumblr.com = test123
 
 **- Contributions are welcome! Open a pull-request :)**
 
