@@ -10,7 +10,12 @@
        <div v-if="loading" class="loading apollo">Loading...</div>
        <!-- Error -->
        <div v-else-if="error" class="error apollo">
-         <a-alert show variant="danger">An error occured</a-alert>
+                   <a-card      style="width: 100%;padding-top: 10px; height: 100%">
+         <a-alert
+        type="error"
+        message="An error occured"
+        showIcon/>
+    </a-card>
        </div>
        <!-- Result -->
        <div v-else-if="data"  v-on="onChange1(data)" class="result apollo">

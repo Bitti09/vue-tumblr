@@ -15,8 +15,14 @@
         <div v-if="loading" class="loading apollo">Loading...</div>
         <!-- Error -->
         <div v-else-if="error" class="error apollo">
-          <b-alert show variant="danger"><icon name="ban"></icon>An error occured</b-alert>
-        </div>
+        <a-card
+        style="width: 100%;padding-top: 10px; height: 100%">
+         <a-alert
+        type="error"
+        message="An error occured"
+        showIcon/>
+    </a-card>   
+         </div>
         <!-- Result -->
         <div v-else-if="data" class="result apollo" style="padding-top: 38px">
           <a-card style="width: 100%;margin-top:10px;max-height: 430px" :title="data.BlogPosts.blog.title">

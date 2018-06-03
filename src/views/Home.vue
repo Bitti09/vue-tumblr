@@ -14,11 +14,12 @@
 
         <!-- Error -->
         <div v-else-if="error" class="error apollo">
+          <a-card      style="width: 100%;padding-top: 10px; height: 100%">
      <a-alert
       type="error"
       :message="error.message"
       showIcon
-    />
+    /></a-card>
         </div>
 
         <!-- Result -->

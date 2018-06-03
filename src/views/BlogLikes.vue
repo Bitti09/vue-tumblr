@@ -16,11 +16,13 @@
 
         <!-- Error -->
         <div v-else-if="error" class="error apollo">
-             <a-alert
-      type="error"
+        <a-card
+        style="width: 100%;padding-top: 10px; height: 100%">
+         <a-alert
+        type="error"
       message="An error occured. Maybe the User has hidden his liked posts."
-      showIcon
-    />
+        showIcon/>
+    </a-card>
         </div>
         <!-- Result -->
         <div v-else-if="data" v-on="onChange1(data)" class="result apollo">
