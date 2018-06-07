@@ -1,22 +1,19 @@
 <template>
   <a-card
-      style="width: 15rem;max-height:200.312px"
->
+      style="width: 15rem;max-height:200.312px">
   <a-card-meta
     :title="blog_name"
     :description="this.timen1">
     <a-avatar slot="avatar" :src="this.avatar" />
   </a-card-meta>
         <ul class="ant-card-actions" slot="actions">
-
-            <li style="width: 100%;">
+        <li style="width: 100%;">
       <router-link
-      :to="{
-        name: 'BlogPosts',
-        params: { User: blog_name , page: '1', filter: 'all' }}">
-      Blog Posts<a-icon type="caret-right"  color="grey" />
+      :to="varblog">
+      Blog Posts
+      <a-icon type="caret-right"  color="grey" />
     </router-link>
-            </li>
+    </li>
     </ul>
     <span v-if="title" style="height: 6rem">
       <p>
@@ -58,6 +55,13 @@ export default {
       }.tumblr.com/avatar/40`,
       timen1: this.$moment(this.timestamp * 1000).fromNow()
     };
-  }
+  },
+      computed: {
+  varblog() {
+    var x = {
+        name: 'BlogPosts',
+        params: { User: this.blog_name , page: '1', filter: 'all' }}
+    return x
+  }}
 };
 </script>

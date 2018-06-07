@@ -1,39 +1,32 @@
 <template>
 <a-card
   hoverable
-    style="width: 20rem"
->
+    style="width: 20rem">
   <img
     alt="example"
     v-img:name
     :src="picurl"
     slot="cover"
     style="height: 15rem"
-
   />
       <ul class="ant-card-actions" slot="actions">
     <li style="width: 25%;">
 <a-icon v-if="!video" type="picture" />
 <a-icon v-if="video" type="video-camera" />
 {{piccount}}
-
 </li>
         <li style="width: 25%;">
           <a-icon type="message" /> {{notecount}}
         </li>
     <li style="width: 25%;">
               <router-link
-        :to="{
-          name: 'PostDetail',
-          params: { Postid: this.postid, User: this.blog_name , page: '1'}}">
+        :to='vars'>
           <a-icon type="caret-right" /> Details
               </router-link>
               </li>
     <li style="width: 25%;">
             <router-link
-      :to="{
-        name: 'BlogPosts',
-        params: { User: blog_name , page: '1', filter: 'all' }}">
+      :to='vars2'>
          <a-icon type="caret-right" /> Blog
             </router-link>
             </li>
@@ -44,8 +37,7 @@
         </li>
   </ul>
     <div v-if="summary" style="height: 6rem">
-
-    <p > {{summary}}
+    <p> {{summary}}
 </p>
   </div>
   <div v-if="!summary" style="height: 6rem">
@@ -79,8 +71,22 @@ export default {
   ],
   data() {
     return {
-      timen1: this.$moment(this.timestamp * 1000).fromNow()
-    };
+      timen1: this.$moment(this.timestamp * 1000).fromNow(),
+}
+  },
+  computed: {
+  vars() {
+    var x = {
+          name: "PostDetail",
+          params: { Postid: this.postid, User: this.blog_name , page: 1}}
+    return x
+  },
+  vars2() {
+    var x =   {
+        name: 'BlogPosts',
+        params: { User: this.blog_name , page: '1', filter: 'all' }}
+    return x
   }
+}
 };
 </script>

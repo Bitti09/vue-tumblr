@@ -27,7 +27,14 @@
         <!-- Result -->
         <div v-else-if="data" v-on="onChange1(data)" class="result apollo">
             <a-affix :offsetTop="50" >
-    <a-card style="width: 100%;padding-top: 10px; height: 85px">
+                  <a-card style="width: 100%;padding-top: 10px; height: 85px">
+               <a-row >
+      <a-col :span="8">
+            <a-button type="primary">
+        <a-icon type="left" />Go back
+      </a-button> 
+      </a-col>
+      <a-col :span="8" :offset="1">
             <a-pagination       :showTotal="total => `Total ${total} Pages`"
               showQuickJumper
       :pageSize="1"
@@ -35,6 +42,8 @@
       :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
       :total="101" />
+            </a-col>
+      </a-row>
           </a-card></a-affix><br>
 
                               <a-card style="width: 100%">

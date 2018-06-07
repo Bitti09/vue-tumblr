@@ -1,15 +1,13 @@
 <template>
 <a-card
   hoverable
-    style="width: 25rem"
->      <img
+    style="width: 25rem">
+  <img
     alt="example"
     v-img:name
     :src="imgSrc"
     slot="cover"
-    style="height: 15rem"
-
-  />
+    style="height: 15rem"/>
       <small >Image  {{index1+1}} of {{index2}}</small>
 </a-card>
 </template>

@@ -11,6 +11,7 @@ import Antd from "vue-antd-ui";
 import "vue-antd-ui/dist/antd.css";
 import VuePlyr from "vue-plyr";
 import "vue-plyr/dist/vue-plyr.css";
+import i18n from './i18n'
 
 Vue.use(VueImg);
 Vue.use(Antd);
@@ -24,5 +25,6 @@ new Vue({
   router,
   store,
   provide: createProvider().provide(),
+  i18n,
   render: h => h(App)
 }).$mount("#app");

@@ -26,13 +26,17 @@
         <div v-else-if="data"   class="result apollo">
                       <a-affix :offsetTop="50" >
     <a-card style="width: 100%;padding-top: 10px; height: 85px">
-                      <a-pagination       :showTotal="total => `Total ${total} Pages`"
+   
+      <a-pagination       :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
       :current="$route.params.page * 1"
       :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
       showQuickJumper
-      :total="roundnumber( data.UserLikes.liked_count/10)" /></a-card></a-affix><br>
+      :total="roundnumber( data.UserLikes.liked_count/10)" />
+
+      </a-card>
+                      </a-affix><br>
                     <a-card style="width: 100%">
                       <br>
 You <a-icon type="heart" />

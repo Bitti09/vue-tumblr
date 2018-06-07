@@ -68,9 +68,7 @@
           :title="blogshare(data.BlogPosts.blog.name)">
           <span v-if="data.BlogPosts.blog.share_likes">
          <router-link
-           :to="{
-             name: 'BlogLikes',
-             params: { User: $route.params.User , page: '0', tstamp: '0',filter: 'all' }}">
+           :to="vars">
      <a-alert
       message="YES, view them"
       type="success"
@@ -205,6 +203,12 @@ export default {
     this.checkfilter();
   },
   computed: {
+      vars() {
+    var x = {
+             name: 'BlogLikes',
+             params: { User: this.$route.params.User , page: '0', tstamp: '0',filter: 'all' }}
+    return x
+  },
     pagenum() {
       return this.$route.params.page * 1 - 1;
     }
