@@ -38,7 +38,7 @@ export default {
     vars() {
       var x = {
         name: "BlogPosts",
-        params: { User: this.reblogname, page: "0", filter: "all" }
+        params: { User: this.reblogname, page: "1", filter: "all" }
       };
       return x;
     }
@@ -47,7 +47,7 @@ export default {
     varslike(note) {
       const val = {
         name: "BlogPosts",
-        params: { User: note.blog_name, page: "0", filter: "all" }
+        params: { User: note.blog_name, page: "1", filter: "all" }
       };
       return val;
     }

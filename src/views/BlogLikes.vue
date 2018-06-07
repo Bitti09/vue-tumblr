@@ -13,7 +13,6 @@
       <template slot-scope="{ result: { loading, error, data } }">
         <!-- Loading -->
         <div v-if="loading" class="loading apollo">Loading...</div>
-
         <!-- Error -->
         <div v-else-if="error" class="error apollo">
         <a-card
@@ -30,9 +29,12 @@
                   <a-card style="width: 100%;padding-top: 10px; height: 85px">
                <a-row >
       <a-col :span="8">
+                    <router-link
+      :to="varblog()">
             <a-button type="primary">
         <a-icon type="left" />Go back
       </a-button> 
+                    </router-link>
       </a-col>
       <a-col :span="8" :offset="1">
             <a-pagination       :showTotal="total => `Total ${total} Pages`"
@@ -41,7 +43,7 @@
       :current="$route.params.page * 1"
       :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
-      :total="101" />
+      :total="roundnumber(data.BlogLikes.liked_count/10)" />
             </a-col>
       </a-row>
           </a-card></a-affix><br>
@@ -105,10 +107,18 @@ export default {
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1 - 1,
       blogname: this.$route.params.User,
-      tstamp: "0"
+      tstamp: "0",
+      pages: "2"
     };
   },
   methods: {
+    varblog() {
+      var x = {
+        name: "BlogPosts",
+        params: { User: this.blog1, page: "1", filter: "all" }
+      };
+      return x;
+    },
     roundnumber(value) {
       const val = Math.round(value);
       return val;
@@ -130,7 +140,9 @@ export default {
       });
     },
     onChange1(data) {
+      this.pages = data.BlogLikes.liked_count;
       if (data.BlogLikes.liked_posts.length > 0) {
+        data.BlogLikes.liked_posts.length;
         this.tstamp =
           data.BlogLikes.liked_posts[
             data.BlogLikes.liked_posts.length - 1

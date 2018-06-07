@@ -16,7 +16,8 @@
 <a-icon  type="video-camera" /> 1
 </li>
         <li style="width: 25%;">
-          <a-icon type="message" /> {{notecount}}
+          <a-icon v-if="this.liked" @click="checklike()" type="heart" />
+                    <a-icon v-if="!this.liked" @click="checklike()" type="heart-o" />
         </li>
     <li style="width: 25%;">
               <router-link
@@ -32,7 +33,7 @@
             </li>
   </ul>
     <a-card-meta
-    :title="blog_name"
+    :title="blogname"
     :description="this.time1">
         <a-avatar slot="avatar" :src="this.avatar" />
   </a-card-meta><br>
@@ -50,6 +51,10 @@
 <style scoped>
 </style>
 <script>
+
+import POST_LIKE from '../graphql/BlogPostsLike.gql'
+import POST_DISLIKE from '../graphql/BlogPostsDisLike.gql'
+
 export default {
   props: [
     "picurl",
@@ -57,7 +62,8 @@ export default {
     "piccount",
     "liked",
     "postid",
-    "blog_name",
+    "reblogkey",
+    "blogname",
     "summary",
     "timestamp",
     "video"
@@ -65,23 +71,93 @@ export default {
   data() {
     return {
       avatar: `https://api.tumblr.com/v2/blog/${
-        this.blog_name
+        this.blogname
       }.tumblr.com/avatar/128`,
       time1: ""
     };
   },
+      methods: {
+      checklike()
+      {
+        if (this.liked == true)
+{        console.log("liked")
+this.dislikepost()
+this.$emit('enlarge-text')
+
+}
+        if (this.liked == false)
+{        console.log("not liked")
+this.likepost()
+this.$emit('enlarge-text')
+}
+
+      },
+   		dislikepost () {
+        const id = this.postid*1
+        const reblog_key = this.reblogkey
+        const var1 = this.var1
+				try {
+					this.$apollo.mutate({
+						mutation: POST_DISLIKE,
+						variables: {
+              id,
+              reblog_key,
+						},
+						optimisticResponse: {
+							__typename: 'Mutation',
+							UnlikePost: {
+								__typename: 'Like',
+                reblog_key,
+                id
+							},
+						},
+					})
+				} catch (e) {
+					console.error(e)
+					//this.label = label
+        }
+      },   
+		likepost () {
+        const id = this.postid*1
+        const reblog_key = this.reblogkey
+        const var1 = this.var1
+				try {
+					this.$apollo.mutate({
+						mutation: POST_LIKE,
+						variables: {
+              id,
+              reblog_key,
+						},
+						optimisticResponse: {
+							__typename: 'Mutation',
+							LikePost: {
+								__typename: 'Like',
+                reblog_key,
+                id
+							},
+						},
+					})
+				} catch (e) {
+					console.error(e)
+					//this.label = label
+        }
+      },
+      refresh1()
+      {     
+console.log(this.$parent)}
+		},
   computed: {
     vardetail() {
       var x = {
         name: "PostDetail",
-        params: { Postid: this.postid, User: this.blog_name, page: "1" }
+        params: { Postid: this.postid, User: this.blogname, page: "1" }
       };
       return x;
     },
     varblog() {
       var x = {
         name: "BlogPosts",
-        params: { User: this.blog_name, page: "1", filter: "all" }
+        params: { User: this.blogname, page: "1", filter: "all" }
       };
       return x;
     }

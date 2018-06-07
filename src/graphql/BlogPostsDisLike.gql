@@ -1,0 +1,3 @@
+mutation UnlikePost($id: Float!, $reblog_key: String!) {
+  UnlikePost(id: $id, reblog_key: $reblog_key)
+}

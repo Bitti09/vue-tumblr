@@ -32,8 +32,13 @@
             </li>
   </ul>
         <ul class=" time ant-card-actions" >
-        <li style="width: 100%;">
+        <li style="width: 70%;">
           <a-icon type="clock-circle-o" /> Posted {{this.timen1}}
+        </li>
+                <li style="width: 30%;">
+          <a-icon v-if="this.liked" @click="checklike()" type="heart" />
+                    <a-icon v-if="!this.liked" @click="checklike()" type="heart-o" />
+
         </li>
   </ul>
     <div v-if="summary" style="height: 6rem">
@@ -57,6 +62,10 @@
 }
 </style>
 <script>
+import DATA_ALL from '../graphql/BlogPosts.gql'
+import POST_LIKE from '../graphql/BlogPostsLike.gql'
+import POST_DISLIKE from '../graphql/BlogPostsDisLike.gql'
+
 export default {
   props: [
     "picurl",
@@ -64,8 +73,10 @@ export default {
     "piccount",
     "liked",
     "postid",
-    "blog_name",
+    "blogname",
+    "var1",
     "summary",
+    "reblogkey",
     "timestamp",
     "video"
   ],
@@ -78,17 +89,87 @@ export default {
     vars() {
       var x = {
         name: "PostDetail",
-        params: { Postid: this.postid, User: this.blog_name, page: 1 }
+        params: { Postid: this.postid, User: this.blogname, page: 1 }
       };
       return x;
     },
     vars2() {
       var x = {
         name: "BlogPosts",
-        params: { User: this.blog_name, page: "1", filter: "all" }
+        params: { User: this.blogname, page: "1", filter: "all" }
       };
       return x;
     }
-  }
+  },
+    methods: {
+      checklike()
+      {
+        if (this.liked == true)
+{        console.log("liked")
+this.dislikepost()
+this.$emit('enlarge-text')
+
+}
+        if (this.liked == false)
+{        console.log("not liked")
+this.likepost()
+this.$emit('enlarge-text')
+}
+
+      },
+   		dislikepost () {
+        const id = this.postid*1
+        const reblog_key = this.reblogkey
+        const var1 = this.var1
+				try {
+					this.$apollo.mutate({
+						mutation: POST_DISLIKE,
+						variables: {
+              id,
+              reblog_key,
+						},
+						optimisticResponse: {
+							__typename: 'Mutation',
+							UnlikePost: {
+								__typename: 'Like',
+                reblog_key,
+                id
+							},
+						},
+					})
+				} catch (e) {
+					console.error(e)
+					//this.label = label
+        }
+      },   
+		likepost () {
+        const id = this.postid*1
+        const reblog_key = this.reblogkey
+        const var1 = this.var1
+				try {
+					this.$apollo.mutate({
+						mutation: POST_LIKE,
+						variables: {
+              id,
+              reblog_key,
+						},
+						optimisticResponse: {
+							__typename: 'Mutation',
+							LikePost: {
+								__typename: 'Like',
+                reblog_key,
+                id
+							},
+						},
+					})
+				} catch (e) {
+					console.error(e)
+					//this.label = label
+        }
+      },
+      refresh1()
+      {     
+console.log(this.$parent)}
+		},
 };
 </script>

@@ -20,6 +20,7 @@ query BlogPosts($blogname: String!, $num : Int!, $filter: String){
       type
       note_count
       liked
+      reblog_key
       timestamp
       thumbnail_url
       video_url

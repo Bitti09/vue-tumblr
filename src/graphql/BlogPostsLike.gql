@@ -1,0 +1,3 @@
+mutation LikePost($id: Float!, $reblog_key: String!) {
+  LikePost(id: $id, reblog_key: $reblog_key)
+}
