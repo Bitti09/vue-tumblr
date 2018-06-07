@@ -1,6 +1,6 @@
 {
-  "name": "vue-tumblr",
-  "short_name": "vue-tumblr",
+  "name": "Vue Tumblr Viewer",
+  "short_name": "Vue Tumblr Viewer",
   "icons": [
     {
       "src": "/img/icons/android-chrome-192x192.png",

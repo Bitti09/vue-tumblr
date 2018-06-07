@@ -56,12 +56,14 @@ export default {
       timen1: this.$moment(this.timestamp * 1000).fromNow()
     };
   },
-      computed: {
-  varblog() {
-    var x = {
-        name: 'BlogPosts',
-        params: { User: this.blog_name , page: '1', filter: 'all' }}
-    return x
-  }}
+  computed: {
+    varblog() {
+      var x = {
+        name: "BlogPosts",
+        params: { User: this.blog_name, page: "1", filter: "all" }
+      };
+      return x;
+    }
+  }
 };
 </script>

@@ -70,20 +70,22 @@ export default {
       time1: ""
     };
   },
-    computed: {
-  vardetail() {
-    var x = {
-          name: 'PostDetail',
-          params: { Postid: this.postid, User: this.blog_name , page: '1'}}
-    return x
-  },
-  varblog() {
-    var x = {
-        name: 'BlogPosts',
-        params: { User: this.blog_name , page: '1', filter: 'all' }}
-    return x
-  }
+  computed: {
+    vardetail() {
+      var x = {
+        name: "PostDetail",
+        params: { Postid: this.postid, User: this.blog_name, page: "1" }
+      };
+      return x;
     },
+    varblog() {
+      var x = {
+        name: "BlogPosts",
+        params: { User: this.blog_name, page: "1", filter: "all" }
+      };
+      return x;
+    }
+  },
   mounted() {
     this.time1 = this.$moment(this.timestamp * 1000).fromNow();
   }

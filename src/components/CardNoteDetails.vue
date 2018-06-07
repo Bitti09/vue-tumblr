@@ -34,19 +34,21 @@ Likes / Reblogs:<br>
 <script>
 export default {
   props: ["notes", "reblogid", "reblogname"],
-    computed: {
-  vars() {
-    var x = {
-      name: 'BlogPosts',
-      params: { User: this.reblogname , page: '0', filter: 'all' }}
-    return x
-  }
-    },
-    methods: {
+  computed: {
+    vars() {
+      var x = {
+        name: "BlogPosts",
+        params: { User: this.reblogname, page: "0", filter: "all" }
+      };
+      return x;
+    }
+  },
+  methods: {
     varslike(note) {
       const val = {
-      name: 'BlogPosts',
-      params: { User: note.blog_name , page: '0', filter: 'all' }}
+        name: "BlogPosts",
+        params: { User: note.blog_name, page: "0", filter: "all" }
+      };
       return val;
     }
   }

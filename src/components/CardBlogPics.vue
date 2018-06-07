@@ -71,22 +71,24 @@ export default {
   ],
   data() {
     return {
-      timen1: this.$moment(this.timestamp * 1000).fromNow(),
-}
+      timen1: this.$moment(this.timestamp * 1000).fromNow()
+    };
   },
   computed: {
-  vars() {
-    var x = {
-          name: "PostDetail",
-          params: { Postid: this.postid, User: this.blog_name , page: 1}}
-    return x
-  },
-  vars2() {
-    var x =   {
-        name: 'BlogPosts',
-        params: { User: this.blog_name , page: '1', filter: 'all' }}
-    return x
+    vars() {
+      var x = {
+        name: "PostDetail",
+        params: { Postid: this.postid, User: this.blog_name, page: 1 }
+      };
+      return x;
+    },
+    vars2() {
+      var x = {
+        name: "BlogPosts",
+        params: { User: this.blog_name, page: "1", filter: "all" }
+      };
+      return x;
+    }
   }
-}
 };
 </script>

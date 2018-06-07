@@ -203,12 +203,18 @@ export default {
     this.checkfilter();
   },
   computed: {
-      vars() {
-    var x = {
-             name: 'BlogLikes',
-             params: { User: this.$route.params.User , page: '0', tstamp: '0',filter: 'all' }}
-    return x
-  },
+    vars() {
+      var x = {
+        name: "BlogLikes",
+        params: {
+          User: this.$route.params.User,
+          page: "0",
+          tstamp: "0",
+          filter: "all"
+        }
+      };
+      return x;
+    },
     pagenum() {
       return this.$route.params.page * 1 - 1;
     }
