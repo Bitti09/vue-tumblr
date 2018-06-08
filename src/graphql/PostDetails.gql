@@ -13,6 +13,8 @@ query BlogPosts($blogname: String, $postid: Float, $filter: String, $notes_info:
         liked
         caption
         reblog_key
+        video_type
+        permalink_url
         source_title
         reblogged_root_id
         reblogged_root_name

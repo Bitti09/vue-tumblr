@@ -15,8 +15,18 @@
        </div>
        <!-- Result -->
        <div v-else-if="!$apollo.queries.Dashboard.loading"  class="result apollo">
-                     <a-affix :offsetTop="50" >
-    <a-card style="width: 100%;padding-top: 10px; height: 85px">
+  <a-affix :offsetTop="50" >
+    <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
+                           <a-row >
+            <a-col :span="6">
+            <a-radio-group @change="onChangeFilter" :defaultValue="$route.params.filter">
+        <a-radio-button value="all">All</a-radio-button>
+        <a-radio-button value="photo">Photos only</a-radio-button>
+        <a-radio-button value="video">Video only</a-radio-button>
+        <a-radio-button value="d" disabled>Answers only</a-radio-button>
+      </a-radio-group>
+            </a-col>
+                  <a-col :span="10" :offset="2">
     <a-pagination
       :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
@@ -24,7 +34,11 @@
       :defaultCurrent="$route.params.page * 1-1"
       @change="onChange "
       showQuickJumper
-      :total="101" /></a-card></a-affix><br>
+      :total="101" />
+                        </a-col>
+      </a-row>
+      </a-card>
+      </a-affix><br>
     <a-row type="flex" justify="start" align="top">
       <span v-for="post in this.Dashboard"  :key="post.index">
           <a-col :xl="10" >
@@ -65,13 +79,13 @@
 </template>
 <script>
 import CardPics from "../components/CardPics.vue";
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export default {
   data() {
     return {
       var1: {},
-      error:0,
+      error: 0,
       filter1: this.$route.params.filter,
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1,
@@ -80,10 +94,8 @@ export default {
     };
   },
   methods: {
-        test()
-    {
-console.log("refetch")
-this.$apollo.queries.Dashboard.refetch()
+    test() {
+      this.$apollo.queries.Dashboard.refetch();
     },
     roundnumber(value) {
       const val = Math.round(value);
@@ -102,91 +114,124 @@ this.$apollo.queries.Dashboard.refetch()
     },
     onChange(pageNumber) {
       // eslint-disable-next-line
-      console.log('Page: ', pageNumber);
       // eslint-disable-next-line
       this.$router.push({
         name: this.name1,
         params: {
           page: pageNumber,
-          filter: this.filter1,
+          filter: this.$route.params.filter,
           User: this.blog1
         }
       });
     },
     onChange1() {
       // eslint-disable-next-line
-      console.log(this.Dashboard[this.Dashboard.length - 1].timestamp);
       this.tstamp = this.Dashboard[this.Dashboard.length - 1].id;
+    },
+      onChangeFilter(data){
+      console.log(data.target.value)
+      this.$router.push({
+        name: this.name1,
+        params: {
+          page: this.$route.params.page * 1,
+          filter: data.target.value,
+          User: this.blog1
+        }
+      });
     }
   },
-    apollo: {
-  // Advanced query with parameters
-  // The 'variables' method is watched by vue
-  Dashboard: {
-      query: gql`query Dashboard($num: Int, $method: String){
-  Dashboard(offset:$num, type: $method){
-    id
-    type
-    id
-    note_count
-    liked
-    reblog_key
-    timestamp
-    thumbnail_url
-    blog_name
-    summary
-    photos {
-      original_size {
-        url
-      }
-    }
-  }
-}`,
-    // Reactive parameters
-    variables() {
-      // Use vue reactive properties here
-      return {
+  apollo: {
+    // Advanced query with parameters
+    // The 'variables' method is watched by vue
+    Dashboard: {
+      query()
+      {
+        if (this.$route.params.filter !== "all"){
+          return gql`
+        query Dashboard($num: Int, $method: String) {
+          Dashboard(offset: $num, type: $method) {
+            id
+            type
+            id
+            note_count
+            liked
+            reblog_key
+            timestamp
+            thumbnail_url
+            blog_name
+            summary
+            photos {
+              original_size {
+                url
+              }
+            }
+          }
+        }
+      `}
+      else if (this.$route.params.filter == "all"){
+          return gql`
+        query Dashboard($num: Int) {
+          Dashboard(offset: $num) {
+            id
+            type
+            id
+            note_count
+            liked
+            reblog_key
+            timestamp
+            thumbnail_url
+            blog_name
+            summary
+            photos {
+              original_size {
+                url
+              }
+            }
+          }
+        }
+      `}},
+      // Reactive parameters
+      variables() {
+        // Use vue reactive properties here
+        return {
           num: (this.$route.params.page * 1 - 1) * 10,
-      }
-    },
-        fetchPolicy: 'network-only',
-    // Variables: deep object watch
-    deep: false,
-          result({ data, loading, networkStatus }) {
-        this.Dashboard = data.Dashboard
+          method: this.$route.params.filter
+        };
       },
-    // We use a custom update callback because
-    // the field names don't match
-    // By default, the 'pingMessage' attribute
-    // would be used on the 'data' result object
-    // Here we know the result is in the 'ping' attribute
-    // considering the way the apollo server works
-    // Optional result hook
-    // Error handling
-    error(error) {
-      console.error('We\'ve got an error!', error)
-    },
-    // Loading state
-    // loadingKey is the name of the data property
-    // that will be incremented when the query is loading
-    // and decremented when it no longer is.
-    loadingKey: 'loadingQueriesCount',
-    // watchLoading will be called whenever the loading state changes
-    watchLoading(isLoading, countModifier) {
-      // isLoading is a boolean
-      // countModifier is either 1 or -1
-    },
+      fetchPolicy: "network-only",
+      // Variables: deep object watch
+      deep: false,
+      result({ data }) {
+        this.Dashboard = data.Dashboard;
+      },
+      // We use a custom update callback because
+      // the field names don't match
+      // By default, the 'pingMessage' attribute
+      // would be used on the 'data' result object
+      // Here we know the result is in the 'ping' attribute
+      // considering the way the apollo server works
+      // Optional result hook
+      // Error handling
+      //error(error) {
+      //  console.error("We've got an error!", error);
+      //},
+      // Loading state
+      // loadingKey is the name of the data property
+      // that will be incremented when the query is loading
+      // and decremented when it no longer is.
+      loadingKey: "loadingQueriesCount"
+      // watchLoading will be called whenever the loading state changes
+    }
   },
-},
   // eslint-disable-next-line
   mounted: function() {
     this.checkfilter();
   },
   watch: {
     // eslint-disable-next-line
-    '$route.params': function(newVal, oldVal) {
+    "$route.params": function(newVal, oldVal) {
       // eslint-disable-next-line
-      console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+      console.log("Prop changed: ", newVal, " | was: ", oldVal);
       this.checkfilter();
       // eslint-disable-next-line
       console.log(this.$route.params);

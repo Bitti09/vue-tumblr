@@ -1,6 +1,6 @@
 <template>
   <a-card
-      style="width: 15rem;max-height:200.312px">
+      style="width: 15rem;max-height:200.312px;min-height:200.312px">
   <a-card-meta
     :title="blog_name"
     :description="this.timen1">
@@ -31,6 +31,13 @@
 .ant-card-body {
   min-height: 155px !important;
   max-height: 155px !important;
+}
+.ant-card-actions {
+  min-height: 46px !important;
+  max-height: 46px !important;
+  position:absolute;
+  bottom:0;
+  width: 100%;
 }
 p {
   margin-top: 6px !important;

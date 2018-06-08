@@ -1,20 +1,10 @@
 <template>
   <div class="apollo-example">
     <!-- Apollo watched Graphql query -->
-    <ApolloQuery
-      :query="require('../graphql/BlogLikes.gql')"
-      :variables="{
-        num: (this.$route.params.page * 1 - 1) * 10,
-        blogname: this.$route.params.User,
-        method: 'offset',
-        limit: 10
-      }"
-    >
-      <template slot-scope="{ result: { loading, error, data } }">
         <!-- Loading -->
-        <div v-if="loading" class="loading apollo">Loading...</div>
+        <div v-if="$apollo.queries.BlogLikes.loading" class="loading apollo">Loading...</div>
         <!-- Error -->
-        <div v-else-if="error" class="error apollo">
+        <div v-else-if="this.error" class="error apollo">
         <a-card
         style="width: 100%;padding-top: 10px; height: 100%">
          <a-alert
@@ -24,17 +14,11 @@
     </a-card>
         </div>
         <!-- Result -->
-        <div v-else-if="data" v-on="onChange1(data)" class="result apollo">
+        <div v-else-if="this.BlogLikes"  class="result apollo">
             <a-affix :offsetTop="50" >
                   <a-card style="width: 100%;padding-top: 10px; height: 85px">
                <a-row >
       <a-col :span="8">
-                    <router-link
-      :to="varblog()">
-            <a-button type="primary">
-        <a-icon type="left" />Go back
-      </a-button> 
-                    </router-link>
       </a-col>
       <a-col :span="8" :offset="1">
             <a-pagination       :showTotal="total => `Total ${total} Pages`"
@@ -43,17 +27,17 @@
       :current="$route.params.page * 1"
       :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
-      :total="roundnumber(data.BlogLikes.liked_count/10)" />
+      :total="roundnumber(this.BlogLikes.liked_count/10)" />
             </a-col>
       </a-row>
           </a-card></a-affix><br>
 
                               <a-card style="width: 100%">
 "{{$route.params.User}}" <a-icon type="heart" />
-     {{data.BlogLikes.liked_count}} Posts<br>
-     ( ~ {{roundnumber( data.BlogLikes.liked_count/10)}} Pages )<br>
+     {{this.BlogLikes.liked_count}} Posts<br>
+     ( ~ {{roundnumber( this.BlogLikes.liked_count/10)}} Pages )<br>
        <a-alert
-       v-if="data.BlogLikes.liked_count > 1000"
+       v-if="this.BlogLikes.liked_count > 1000"
       type="warning"
       message="currently only the 1000 recent Posts can be viewed on this page"
       showIcon
@@ -61,7 +45,7 @@
     </a-card> <br>
     <a-row type="flex" justify="start" align="top">
 
- <div  v-for="post in data.BlogLikes.liked_posts"  :key="post.index">
+ <div  v-for="post in this.BlogLikes.liked_posts"  :key="post.index">
    <!-- Pic Cards -->
 <CardPics v-if="post.photos"
    :picurl="post.photos['0'].original_size.url"
@@ -69,7 +53,7 @@
    :piccount="post.photos.length"
    :liked="post.liked"
    :postid="post.id"
-   :blog_name="post.blog_name"
+   :blogname="post.blog_name"
    :summary="post.summary"
    :timestamp="post.timestamp" />
    <CardPics v-if="post.thumbnail_url"
@@ -78,12 +62,12 @@
            :video="1"
            :liked="post.liked"
            :postid="post.id"
-           :blog_name="post.blog_name"
+           :blogname="post.blog_name"
            :summary="post.summary"
            :timestamp="post.timestamp" />
         </div>
     </a-row>
-              <div v-if="data.BlogLikes.liked_posts.length === 0" >
+              <div v-if="this.BlogLikes.liked_posts.length === 0" >
                                                     <a-alert
       type="error"
       message="No more liked Posts found"
@@ -92,22 +76,23 @@
 </div>
     <!-- No result -->
     <div v-else class="no-result apollo">No result :(</div>
-      </template>
-    </ApolloQuery>
   </div>
 </template>
 
 <script>
 import CardPics from "../components/CardPics.vue";
+import gql from "graphql-tag";
 
 export default {
   data() {
     return {
+      BlogLikes: {},
       filter1: this.$route.params.filter,
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1 - 1,
       blogname: this.$route.params.User,
       tstamp: "0",
+      error: 0,
       pages: "2"
     };
   },
@@ -140,12 +125,12 @@ export default {
       });
     },
     onChange1(data) {
-      this.pages = data.BlogLikes.liked_count;
-      if (data.BlogLikes.liked_posts.length > 0) {
-        data.BlogLikes.liked_posts.length;
+      this.pages = this.BlogLikes.liked_count;
+      if (this.BlogLikes.liked_posts.length > 0) {
+        this.BlogLikes.liked_posts.length;
         this.tstamp =
-          data.BlogLikes.liked_posts[
-            data.BlogLikes.liked_posts.length - 1
+          this.BlogLikes.liked_posts[
+            this.BlogLikes.liked_posts.length - 1
           ].timestamp;
       }
     }
@@ -154,7 +139,70 @@ export default {
   mounted: function() {},
   components: {
     CardPics
+  },
+   apollo: {
+    // Advanced query with parameters
+    // The 'variables' method is watched by vue
+    BlogLikes: {
+      query: gql`
+query BlogLikes($blogname: String, $method: String, $num: Int, $limit: Int){
+  BlogLikes(blog_name: $blogname, method: $method, num: $num, limit: $limit){
+    liked_count
+    liked_posts {
+      post_url
+      blog_name
+      summary
+      caption
+      note_count
+      timestamp
+      thumbnail_url
+      video_url
+      id
+      photos {original_size
+        {
+          url
+        }
+    }
   }
+  }
+}
+      `,
+      // Reactive parameters
+      variables() {
+        // Use vue reactive properties here
+        return {
+        num: (this.$route.params.page * 1 - 1) * 10,
+        blogname: this.$route.params.User,
+        method: 'offset',
+        limit: 10
+        };
+      },
+      fetchPolicy: "network-only",
+      // Variables: deep object watch
+      deep: false,
+      result({ data }) {
+        this.BlogLikes = data.BlogLikes;
+      },
+      // We use a custom update callback because
+      // the field names don't match
+      // By default, the 'pingMessage' attribute
+      // would be used on the 'data' result object
+      // Here we know the result is in the 'ping' attribute
+      // considering the way the apollo server works
+      // Optional result hook
+      // Error handling
+      error(error) {
+        console.error("We've got an error!", error);
+        this.error = 1
+      },
+      // Loading state
+      // loadingKey is the name of the data property
+      // that will be incremented when the query is loading
+      // and decremented when it no longer is.
+      loadingKey: "loadingQueriesCount"
+      // watchLoading will be called whenever the loading state changes
+    }
+  },
 };
 </script>
 

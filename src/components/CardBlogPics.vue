@@ -10,26 +10,20 @@
     style="height: 15rem"
   />
       <ul class="ant-card-actions" slot="actions">
-    <li style="width: 25%;">
+    <li style="width: 33%;">
 <a-icon v-if="!video" type="picture" />
 <a-icon v-if="video" type="video-camera" />
 {{piccount}}
 </li>
-        <li style="width: 25%;">
+        <li style="width: 33%;">
           <a-icon type="message" /> {{notecount}}
         </li>
-    <li style="width: 25%;">
+    <li style="width: 33%;">
               <router-link
         :to='vars'>
           <a-icon type="caret-right" /> Details
               </router-link>
               </li>
-    <li style="width: 25%;">
-            <router-link
-      :to='vars2'>
-         <a-icon type="caret-right" /> Blog
-            </router-link>
-            </li>
   </ul>
         <ul class=" time ant-card-actions" >
         <li style="width: 70%;">
@@ -47,7 +41,7 @@
   </div>
   <div v-if="!summary" style="height: 6rem">
     <p>
-...
+No Summary
 </p>
   </div>
   </a-card>
@@ -62,9 +56,8 @@
 }
 </style>
 <script>
-import DATA_ALL from '../graphql/BlogPosts.gql'
-import POST_LIKE from '../graphql/BlogPostsLike.gql'
-import POST_DISLIKE from '../graphql/BlogPostsDisLike.gql'
+import POST_LIKE from "../graphql/BlogPostsLike.gql";
+import POST_DISLIKE from "../graphql/BlogPostsDisLike.gql";
 
 export default {
   props: [
@@ -101,75 +94,70 @@ export default {
       return x;
     }
   },
-    methods: {
-      checklike()
-      {
-        if (this.liked == true)
-{        console.log("liked")
-this.dislikepost()
-this.$emit('enlarge-text')
-
-}
-        if (this.liked == false)
-{        console.log("not liked")
-this.likepost()
-this.$emit('enlarge-text')
-}
-
-      },
-   		dislikepost () {
-        const id = this.postid*1
-        const reblog_key = this.reblogkey
-        const var1 = this.var1
-				try {
-					this.$apollo.mutate({
-						mutation: POST_DISLIKE,
-						variables: {
-              id,
+  methods: {
+    checklike() {
+      if (this.liked == true) {
+        //console.log("liked");
+        this.dislikepost();
+        this.$emit("enlarge-text");
+      }
+      if (this.liked == false) {
+        //console.log("not liked");
+        this.likepost();
+        this.$emit("enlarge-text");
+      }
+    },
+    dislikepost() {
+      const id = this.postid * 1;
+      const reblog_key = this.reblogkey;
+      try {
+        this.$apollo.mutate({
+          mutation: POST_DISLIKE,
+          variables: {
+            id,
+            reblog_key
+          },
+          optimisticResponse: {
+            __typename: "Mutation",
+            UnlikePost: {
+              __typename: "Like",
               reblog_key,
-						},
-						optimisticResponse: {
-							__typename: 'Mutation',
-							UnlikePost: {
-								__typename: 'Like',
-                reblog_key,
-                id
-							},
-						},
-					})
-				} catch (e) {
-					console.error(e)
-					//this.label = label
-        }
-      },   
-		likepost () {
-        const id = this.postid*1
-        const reblog_key = this.reblogkey
-        const var1 = this.var1
-				try {
-					this.$apollo.mutate({
-						mutation: POST_LIKE,
-						variables: {
-              id,
+              id
+            }
+          }
+        });
+      } catch (e) {
+        //console.error(e);
+        //this.label = label
+      }
+    },
+    likepost() {
+      const id = this.postid * 1;
+      const reblog_key = this.reblogkey;
+      try {
+        this.$apollo.mutate({
+          mutation: POST_LIKE,
+          variables: {
+            id,
+            reblog_key
+          },
+          optimisticResponse: {
+            __typename: "Mutation",
+            LikePost: {
+              __typename: "Like",
               reblog_key,
-						},
-						optimisticResponse: {
-							__typename: 'Mutation',
-							LikePost: {
-								__typename: 'Like',
-                reblog_key,
-                id
-							},
-						},
-					})
-				} catch (e) {
-					console.error(e)
-					//this.label = label
-        }
-      },
-      refresh1()
-      {     
-console.log(this.$parent)}
-		},
+              id
+            }
+          }
+        });
+      } catch (e) {
+        //console.error(e);
+        //this.label = label
+      }
+    },
+    refresh1() {
+      //console.log(this.$parent);
+    }
+  }
 };
 </script>

@@ -16,14 +16,6 @@
 <a-menu-item key="follow">
 Followed
 </a-menu-item>
-  <a-sub-menu
-  v-if="this.$route.name == 'BlogPosts'">
-    <span slot="title">Filter</span>
-      <a-menu-item key="filteroff">No Filter</a-menu-item>
-      <a-menu-item key="filterpic">Pics only</a-menu-item>
-      <a-menu-item key="filtervid">Video only</a-menu-item>
-  </a-sub-menu>
-
 </a-menu>
     </a-layout-header>
     <a-layout-content style="width: 100%;padding-top: 34px !important; ">

@@ -1,5 +1,6 @@
 <template>
-  <div class="apollo-example">
+  <div
+  class="apollo-example">
     <!-- Apollo watched Graphql query -->
     <ApolloQuery
       :query="require('../graphql/PostDetails.gql')"
@@ -8,10 +9,9 @@
         postid: this.$route.params.Postid,
         filter: this.$route.params.filter,
         notes_info: true,reblog_info: true}"
-                  fetchPolicy="cache-first"
->
+        fetchPolicy="cache-first">
       <template slot-scope="{ result: { loading, error, data } }">
-        <!-- Loading -->
+        <!-- Loading -->  
         <div v-if="loading" class="loading apollo">Loading...</div>
         <!-- Error -->
         <div v-else-if="error" class="error apollo">
@@ -25,44 +25,55 @@
          </div>
         <!-- Result -->
         <div v-else-if="data" class="result apollo" style="padding-top: 38px">
-          <a-card style="width: 100%;margin-top:10px;max-height: 430px" :title="data.BlogPosts.blog.title">
-                    <a-row type="flex" justify="start" align="top" style="width: 105.7%;margin-top:-24px;left:-32px;position:relative;">
+          <a-card style="width: 100%;margin-top:10px" :title="data.BlogPosts.blog.title">
+          <a-row type="flex" justify="start" align="top" style="width: 105.7%;margin-top:-24px;left:-32px;position:relative;">
           <a-card
-          v-if="data.BlogPosts.posts['0'].summary"
-      style="width: 50%;height: 140.233px"
+          style="width: 50%;height: 140.233px"
           title="Post Summary:">
-            <span>    {{data.BlogPosts.posts['0'].summary}}
-</span>
+          <span
+          v-if="data.BlogPosts.posts['0'].summary">
+          {{data.BlogPosts.posts['0'].summary}}
+          </span>
+          <span v-else>
+            No Summary
+          </span>
           </a-card>
           <a-card
-      style="width: 50%;height: 140.233px"
+          style="width: 50%;height: 140.233px"
           title="Posted  on:">
-            <span>{{ data.BlogPosts.posts['0'].timestamp | moment("DD.MM.YYYY HH:MM") }}</span><br>
-            <span>~ {{ tago(data.BlogPosts.posts['0'].timestamp) }}</span>
+          <span>{{ data.BlogPosts.posts['0'].timestamp | moment("DD.MM.YYYY HH:MM") }}</span><br>
+          <span>~ {{ tago(data.BlogPosts.posts['0'].timestamp) }}</span>
           </a-card></a-row><br>
           <a-card
-            v-if="data.BlogPosts.posts['0'].caption"
-            style="width: 105.7%;margin-top:0px;left:-32px;position:relative;" title="Post Caption:">
-          <p v-html="data.BlogPosts.posts['0'].caption"></p>
+            style="width: 105.7%;margin-top:0px;left:-32px;position:relative;"
+            title="Post Caption:">
+          <p 
+          v-if="data.BlogPosts.posts['0'].caption"
+          v-html="data.BlogPosts.posts['0'].caption"></p>
+          <p 
+          v-else>No Caption</p>
           </a-card>
-</a-card><br>
-    <a-row type="flex" justify="start" align="top">
+          </a-card>
+          <br>
+          <a-row type="flex" justify="start" align="top">
           <!-- Pic Cards -->
-           <div
-           v-for="(post, index) in data.BlogPosts.posts['0'].photos"
-           v-if="!data.BlogPosts.posts['0'].thumbnail_url"
-           :key="post.index">
-             <CardPicDetails
-                         :img-src="post.original_size.url"
-                         :index2="data.BlogPosts.posts['0'].photos.length"
-                         :index1="index">
-             </CardPicDetails>
-</div>
+          <div
+            v-for="(post, index) in data.BlogPosts.posts['0'].photos"
+            v-if="!data.BlogPosts.posts['0'].thumbnail_url"
+            :key="post.index">
+          <CardPicDetails
+            :img-src="post.original_size.url"
+            :index2="data.BlogPosts.posts['0'].photos.length"
+            :index1="index">
+          </CardPicDetails>
+          </div>
     </a-row>
 <!-- Vid Cards -->
 <CardVidDetails v-if="data.BlogPosts.posts['0'].thumbnail_url"
             :img-src="data.BlogPosts.posts['0'].thumbnail_url"
-            :vid-src="data.BlogPosts.posts['0'].video_url">
+            :vid-src="data.BlogPosts.posts['0'].video_url"
+            :videotype="data.BlogPosts.posts['0'].video_type"
+            :vidSrc2="data.BlogPosts.posts['0'].permalink_url">
 </CardVidDetails><br>
 <!-- Tag Cards -->
 <CardTagDetails v-if="data.BlogPosts.posts['0'].tags"

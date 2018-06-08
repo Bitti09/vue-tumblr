@@ -54,7 +54,7 @@ You <a-icon type="heart" />
              :piccount="post.photos.length * 1"
              :liked="post.liked"
              :postid="post.id"
-             :blog_name="post.blog_name"
+             :blogname="post.blog_name"
              :summary="post.summary"
              :timestamp="post.timestamp" />
              <CardPics v-if="post.thumbnail_url"
@@ -63,7 +63,7 @@ You <a-icon type="heart" />
                      :video="1"
                      :liked="post.liked"
                      :postid="post.id"
-                     :blog_name="post.blog_name"
+                     :blogname="post.blog_name"
                      :summary="post.summary"
                      :timestamp="post.timestamp" />
                          </a-col>

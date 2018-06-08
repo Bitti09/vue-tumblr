@@ -1,7 +1,15 @@
 <template>
-<div>
-  <a-card  style="width: 60%;max-width: 100%;">
-              <plyr-video :poster="imgSrc"  :videos="this.videos"/>
+<div style="width: 70%;max-width: 100%">
+  <a-card  >
+        <d-player v-if="this.videotype !== 'youtube'"
+        :options="options" >
+    </d-player><br>
+        <plyr v-if="this.videotype == 'youtube'">
+        <div class="plyr__video-embed">
+        <iframe :src="this.vidSrc2" allowfullscreen ></iframe>
+    </div>
+</plyr>
+              <!-- <plyr-video :poster="imgSrc"  :videos="this.videos"/>-->
     <small class="text-muted">Video  1 of 1</small>
 </a-card>
 </div>
@@ -10,10 +18,12 @@
 </style>
 <script>
 export default {
-  props: ["img-src", "vid-src"],
+  props: ["img-src", "vid-src", "videotype", "vidSrc2"],
   data() {
     return {
-      videos: [{ src: this.vidSrc, format: "mp4" }]
+              options: {
+      video: { url: this.vidSrc, pic: this.imgSrc }
+              }
     };
   }
 };

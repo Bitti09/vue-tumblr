@@ -17,6 +17,16 @@
         <div v-else-if="this.BlogPosts"  class="result apollo" >
   <a-affix :offsetTop="50" >
     <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
+                     <a-row >
+            <a-col :span="6">
+            <a-radio-group @change="onChangeFilter" :defaultValue="$route.params.filter">
+        <a-radio-button value="all">All</a-radio-button>
+        <a-radio-button value="photo">Photos only</a-radio-button>
+        <a-radio-button value="video">Video only</a-radio-button>
+        <a-radio-button value="d" disabled>Answers only</a-radio-button>
+      </a-radio-group>
+            </a-col>
+                  <a-col :span="10" :offset="2">
   <a-pagination
        :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
@@ -24,7 +34,9 @@
       :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
       showQuickJumper
-      :total="roundnumber( this.BlogPosts.blog.total_posts/10,this.BlogPosts.blog.total_posts)" />
+      :total="roundnumber( this.BlogPosts.total_posts/20,this.BlogPosts.total_posts)" />
+                  </a-col>
+      </a-row>
           </a-card>
   </a-affix>
           <a-card style="width: 100%, marginTop: '54px">
@@ -47,10 +59,9 @@
           <a-card
       style="width: 20%;height: 189.233px"
           title="Total No of Posts:">
-          <span>{{ this.BlogPosts.blog.total_posts}}</span><br>
-          ( ~ {{roundnumber( this.BlogPosts.blog.total_posts/10,0)}} Pages )
-<br>
-               <span v-if="this.BlogPosts.blog.total_posts > 1000">
+          <span>{{ this.BlogPosts.total_posts}}</span><br>
+          ( ~ {{roundnumber( this.BlogPosts.total_posts/20,0)}} Pages )<br>
+               <span v-if="this.BlogPosts.total_posts > 1000">
        (currently only the 2000 recent Posts can be viewed on this page)
      </span>
           </a-card>
@@ -117,8 +128,15 @@
     </a-row>
               <div v-if="this.BlogPosts.posts.length === 0" >
       <a-alert
+      v-if="this.$route.params.filter =='all'"
       type="error"
       message="No more liked Posts found"
+      showIcon
+    />
+      <a-alert
+      v-if="this.$route.params.filter !=='all'"
+      type="error"
+      message="No more liked Posts found for the current active filter"
       showIcon
     />
 </div>
@@ -130,7 +148,7 @@
 <script>
 import CardBlogPics from "../components/CardBlogPics.vue";
 import _ from "lodash";
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export default {
   data() {
@@ -140,12 +158,12 @@ export default {
       page1: this.$route.params.page * 1,
       num1: 0,
       BlogPosts: {},
-      error:0,
-      loading:0,
+      error: 0,
+      loading: 0,
       filter: this.$route.params.filter,
       blogname: this.$route.params.User,
       var1: {
-        num: (this.$route.params.page * 1 - 1) * 10,
+        num: (this.$route.params.page * 1 - 1) * 20,
         blogname: this.$route.params.User
       },
       errormsg: `${this.$route.params.User} has no public liked Posts`,
@@ -156,28 +174,37 @@ export default {
     };
   },
   methods: {
-    test()
-    {
-console.log(this.$apollo.queries.BlogPosts.refetch())
+    test() {
+      // console.log(this.$apollo.queries.BlogPosts.refetch());
+    },
+        onChangeFilter(data){
+      console.log(data.target.value)
+      this.$router.push({
+        name: this.name1,
+        params: {
+          page: this.$route.params.page * 1,
+          filter: data.target.value,
+          User: this.blog1
+        }
+      });
     },
     checkfilter() {
       if (this.$route.params.filter !== "all") {
         this.var1 = {
-          num: (this.$route.params.page * 1 - 1) * 10,
+          num: (this.$route.params.page * 1 - 1) * 20,
           filter: this.$route.params.filter,
           blogname: this.$route.params.User
         };
       }
       if (this.$route.params.filter === "all") {
         this.var1 = {
-          num: (this.$route.params.page * 1 - 1) * 10,
+          num: (this.$route.params.page * 1 - 1) * 20,
           blogname: this.$route.params.User
         };
       }
     },
     onChange(pageNumber) {
       // eslint-disable-next-line
-      console.log('Page: ', pageNumber);
       this.$router.push({
         name: this.name1,
         params: {
@@ -189,7 +216,7 @@ console.log(this.$apollo.queries.BlogPosts.refetch())
     },
     roundnumber(value, value2) {
       if ((value2 > 2000) & (value2 !== "")) {
-        const val = Math.ceil(2000 / 10);
+        const val = Math.ceil(2000 / 20);
         return val;
       } else {
         const val = Math.ceil(value);
@@ -212,86 +239,122 @@ console.log(this.$apollo.queries.BlogPosts.refetch())
   // eslint-disable-next-line
   mounted: function() {
     this.checkfilter();
-
   },
   apollo: {
-  // Advanced query with parameters
-  // The 'variables' method is watched by vue
-  BlogPosts: {
-      query: gql`query BlogPosts($blogname: String!, $num : Int!, $filter: String){
-  BlogPosts(blog_name:$blogname, offset: $num, type: $filter){
-    blog {
-      description
-      title
-      name
-      total_posts
-      updated
-      is_nsfw
-      share_likes
-      is_adult
-      followers
-      likes
-    }
-    posts{
-      post_url
-      caption
-      blog_name
-      summary
-      type
-      note_count
-      liked
-      reblog_key
-      timestamp
-      thumbnail_url
-      video_url
-      id
-      photos
-      {
-        original_size{
-          url
-        }
-      }
-    }
-  }
-}`,
-    // Reactive parameters
+    // Advanced query with parameters
+    // The 'variables' method is watched by vue
+    BlogPosts: {
+      query() {
+    if (this.$route.params.filter !== "all") {
+return  gql`
+        query BlogPosts($blogname: String!, $num: Int!, $filter: String) {
+          BlogPosts(blog_name: $blogname, offset: $num, type: $filter) {
+            blog {
+              description
+              title
+              name
+              total_posts
+              updated
+              is_nsfw
+              share_likes
+              is_adult
+              followers
+              likes
+            }
+            posts {
+              post_url
+              caption
+              blog_name
+              summary
+              type
+              note_count
+              liked
+              reblog_key
+              timestamp
+              thumbnail_url
+              video_url
+              id
+              photos {
+                original_size {
+                  url
+                }
+              }
+            }
+            total_posts
+          }
+        }`
+    } else if (this.$route.params.filter === "all") {
+      return  gql`
+        query BlogPosts($blogname: String!, $num: Int!) {
+          BlogPosts(blog_name: $blogname, offset: $num) {
+            blog {
+              description
+              title
+              name
+              total_posts
+              updated
+              is_nsfw
+              share_likes
+              is_adult
+              followers
+              likes
+            }
+            posts {
+              post_url
+              caption
+              blog_name
+              summary
+              type
+              note_count
+              liked
+              reblog_key
+              timestamp
+              thumbnail_url
+              video_url
+              id
+              photos {
+                original_size {
+                  url
+                }
+              }
+            }
+            total_posts
+          }
+        }`}},
+      // Reactive parameters
     variables() {
-      // Use vue reactive properties here
-      return {
+        // Use vue reactive properties here
+        return {
           blogname: this.blogname,
-          num: (this.$route.params.page * 1 - 1) * 10
-          //filter: this.filter,
-      }
-    },
-        fetchPolicy: 'network-only',
-    // Variables: deep object watch
-    deep: false,
-          result({ data, loading, networkStatus }) {
-        this.BlogPosts = data.BlogPosts
+          num: (this.$route.params.page * 1 - 1) * 20,
+          filter: this.$route.params.filter,
+        }
       },
-    // We use a custom update callback because
-    // the field names don't match
-    // By default, the 'pingMessage' attribute
-    // would be used on the 'data' result object
-    // Here we know the result is in the 'ping' attribute
-    // considering the way the apollo server works
-    // Optional result hook
-    // Error handling
-    error(error) {
-      console.error('We\'ve got an error!', error)
-    },
-    // Loading state
-    // loadingKey is the name of the data property
-    // that will be incremented when the query is loading
-    // and decremented when it no longer is.
-    loadingKey: 'loadingQueriesCount',
-    // watchLoading will be called whenever the loading state changes
-    watchLoading(isLoading, countModifier) {
-      // isLoading is a boolean
-      // countModifier is either 1 or -1
-    },
+      fetchPolicy: "network-only",
+      // Variables: deep object watch
+      deep: false,
+      result({ data }) {
+        this.BlogPosts = data.BlogPosts;
+      },
+      // We use a custom update callback because
+      // the field names don't match
+      // By default, the 'pingMessage' attribute
+      // would be used on the 'data' result object
+      // Here we know the result is in the 'ping' attribute
+      // considering the way the apollo server works
+      // Optional result hook
+      // Error handling
+      //error(error) {
+      //  console.error("We've got an error!", error);
+      //},
+      // Loading state
+      // loadingKey is the name of the data property
+      // that will be incremented when the query is loading
+      // and decremented when it no longer is.
+      loadingKey: "loadingQueriesCount"
+      // watchLoading will be called whenever the loading state changes
+    }
   },
-},
   computed: {
     vars() {
       var x = {
@@ -305,12 +368,12 @@ console.log(this.$apollo.queries.BlogPosts.refetch())
       };
       return x;
     },
-    var11(){
-var var1 = {
+    var11() {
+      var var1 = {
         num: (this.$route.params.page * 1 - 1) * 10,
         blogname: this.$route.params.User
-      }
-      return var1
+      };
+      return var1;
     },
     pagenum() {
       return this.$route.params.page * 1 - 1;
@@ -318,7 +381,7 @@ var var1 = {
   },
   watch: {
     // eslint-disable-next-line
-    '$route.params': function(newVal, oldVal) {
+    "$route.params": function(newVal, oldVal) {
       this.checkfilter();
     }
   },
