@@ -182,7 +182,7 @@ export default {
         params: {
           page: 1 * 1,
           filter: data.target.value,
-          User: this.blog1
+          User: this.$route.params.User
         }
       });
     },
@@ -322,7 +322,7 @@ export default {
       variables() {
         // Use vue reactive properties here
         return {
-          blogname: this.blogname,
+          blogname: this.$route.params.User,
           num: (this.$route.params.page * 1 - 1) * 20,
           filter: this.$route.params.filter
         };

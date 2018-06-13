@@ -3,7 +3,7 @@
   hoverable
     style="width: 25rem">
   <img
-    alt="example"
+    alt="Pic Loading..."
     v-img:name
     :src="imgSrc"
     slot="cover"

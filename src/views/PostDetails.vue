@@ -2,7 +2,7 @@
   <div class="apollo-example">
     <!-- Apollo watched Graphql query -->
         <!-- Loading -->
-        <div v-if="$apollo.queries.BlogPosts.loading" class="loading apollo">Loading...</div>
+        <div v-if="$apollo.queries.BlogPosts.loading" class="loading apollo">{{this.BlogPosts}}</div>
         <!-- Error -->
         <div v-else-if="this.error" class="error apollo">
         <a-card
@@ -14,7 +14,7 @@
     </a-card>
          </div>
         <!-- Result -->
-        <div v-else-if="!this.error" class="result apollo" style="padding-top: 38px">
+        <div v-else-if="this.BlogPosts" class="result apollo" style="padding-top: 38px">
           <a-card style="width: 100%;margin-top:10px" :title="this.BlogPosts.blog.title">
           <a-row type="flex" justify="start" align="top" style="width: 105.7%;margin-top:-24px;left:-32px;position:relative;">
           <a-card
@@ -48,23 +48,30 @@
           <a-row type="flex" justify="start" align="top">
           <!-- Pic Cards -->
           <div
-            v-for="(post, index) in this.BlogPosts.posts['0'].photos"
-            v-if="!this.BlogPosts.posts['0'].thumbnail_url"
+          v-if="this.BlogPosts.posts['0'].photos">
+          <div
+            v-for="(post, index,length) in this.BlogPosts.posts['0'].photos"
             :key="post.index">
-          <CardPicDetails
-            :img-src="post.original_size.url"
-            :index2="this.BlogPosts.posts['0'].photos.length"
-            :index1="index">
-          </CardPicDetails>
+            {{length}}
+            <CardPicDetails
+              :img-src="post.original_size.url"
+              :index1="index"
+              :index2="piccount()">
+            </CardPicDetails>
           </div>
+        </div>
     </a-row>
 <!-- Vid Cards -->
-<CardVidDetails v-if="this.BlogPosts.posts['0'].thumbnail_url"
+<div
+v-if="this.BlogPosts.posts['0'].thumbnail_url">
+<CardVidDetails
             :img-src="this.BlogPosts.posts['0'].thumbnail_url"
             :vid-src="this.BlogPosts.posts['0'].video_url"
             :videotype="this.BlogPosts.posts['0'].video_type"
             :vidSrc2="this.BlogPosts.posts['0'].permalink_url">
-</CardVidDetails><br>
+</CardVidDetails>
+</div>
+<br>
 <!-- Tag Cards -->
 <CardTagDetails v-if="this.BlogPosts.posts['0'].tags"
             :tags="this.BlogPosts.posts['0'].tags">
@@ -90,13 +97,10 @@ export default {
   data() {
     return {
       BlogPosts: {},
-      filter1: this.$route.params.filter,
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1 - 1,
       blogname: this.$route.params.User,
-      tstamp: "0",
-      error: 0,
-      pages: "2"
+      error: 0
     };
   },
   methods: {
@@ -106,6 +110,10 @@ export default {
     },
     tago(value) {
       const val = this.$moment(value * 1000).fromNow();
+      return val;
+    },
+    piccount() {
+      const val = this.BlogPosts.posts["0"].photos.length;
       return val;
     }
   },
@@ -123,14 +131,12 @@ export default {
         query BlogPosts(
           $blogname: String
           $postid: Float
-          $filter: String
           $notes_info: Boolean
           $reblog_info: Boolean
         ) {
           BlogPosts(
             blog_name: $blogname
             id: $postid
-            filter: $filter
             notes_info: $notes_info
             reblog_info: $reblog_info
           ) {
@@ -176,7 +182,6 @@ export default {
         return {
           blogname: this.$route.params.User,
           postid: this.$route.params.Postid,
-          filter: this.$route.params.filter,
           notes_info: true,
           reblog_info: true
         };
@@ -185,7 +190,7 @@ export default {
       // Variables: deep object watch
       deep: false,
       result({ data }) {
-        this.BlogLikes = data.BlogLikes;
+        this.BlogPosts = data.BlogPosts;
       },
       // We use a custom update callback because
       // the field names don't match
