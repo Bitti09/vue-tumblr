@@ -5,7 +5,7 @@
         <div v-if="$apollo.queries.BlogPosts.loading" class="loading apollo">Loading...</div>
         <!-- Error -->
         <div v-else-if="this.error" class="error apollo">
-        <a-card 
+        <a-card
         style="width: 100%;padding-top: 10px; height: 100%">
         <a-alert
         type="error"
@@ -18,7 +18,7 @@
   <a-affix :offsetTop="50" >
     <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
                      <a-row >
-            <a-col :span="6">
+            <a-col :span="8">
             <a-radio-group @change="onChangeFilter" :defaultValue="$route.params.filter">
         <a-radio-button value="all">All</a-radio-button>
         <a-radio-button value="photo">Photos only</a-radio-button>
@@ -26,7 +26,7 @@
         <a-radio-button value="d" disabled>Answers only</a-radio-button>
       </a-radio-group>
             </a-col>
-                  <a-col :span="10" :offset="2">
+                  <a-col :span="12" :offset="-1">
   <a-pagination
        :showTotal="total => `Total ${total} Pages`"
       :pageSize="1"
@@ -61,9 +61,6 @@
           title="Total No of Posts:">
           <span>{{ this.BlogPosts.total_posts}}</span><br>
           ( ~ {{roundnumber( this.BlogPosts.total_posts/20,0)}} Pages )<br>
-               <span v-if="this.BlogPosts.total_posts > 1000">
-       (currently only the 2000 recent Posts can be viewed on this page)
-     </span>
           </a-card>
                     <a-card
       style="width: 40%;height: 189.233px"
@@ -177,12 +174,13 @@ export default {
     test() {
       // console.log(this.$apollo.queries.BlogPosts.refetch());
     },
-        onChangeFilter(data){
-      console.log(data.target.value)
+    onChangeFilter(data) {
+      // eslint-disable-next-line
+      console.log(data.target.value);
       this.$router.push({
         name: this.name1,
         params: {
-          page: this.$route.params.page * 1,
+          page: 1 * 1,
           filter: data.target.value,
           User: this.blog1
         }
@@ -215,13 +213,8 @@ export default {
       });
     },
     roundnumber(value, value2) {
-      if ((value2 > 2000) & (value2 !== "")) {
-        const val = Math.ceil(2000 / 20);
-        return val;
-      } else {
-        const val = Math.ceil(value);
-        return val;
-      }
+      const val = Math.ceil(value);
+      return val;
     },
     tago(value) {
       const val = this.$moment(value * 1000).fromNow();
@@ -245,90 +238,94 @@ export default {
     // The 'variables' method is watched by vue
     BlogPosts: {
       query() {
-    if (this.$route.params.filter !== "all") {
-return  gql`
-        query BlogPosts($blogname: String!, $num: Int!, $filter: String) {
-          BlogPosts(blog_name: $blogname, offset: $num, type: $filter) {
-            blog {
-              description
-              title
-              name
-              total_posts
-              updated
-              is_nsfw
-              share_likes
-              is_adult
-              followers
-              likes
-            }
-            posts {
-              post_url
-              caption
-              blog_name
-              summary
-              type
-              note_count
-              liked
-              reblog_key
-              timestamp
-              thumbnail_url
-              video_url
-              id
-              photos {
-                original_size {
-                  url
+        if (this.$route.params.filter !== "all") {
+          return gql`
+            query BlogPosts($blogname: String!, $num: Int!, $filter: String) {
+              BlogPosts(blog_name: $blogname, offset: $num, type: $filter) {
+                blog {
+                  description
+                  title
+                  name
+                  total_posts
+                  updated
+                  is_nsfw
+                  share_likes
+                  is_adult
+                  followers
+                  likes
                 }
+                posts {
+                  post_url
+                  caption
+                  blog_name
+                  summary
+                  type
+                  note_count
+                  liked
+                  reblog_key
+                  timestamp
+                  thumbnail_url
+                  video_url
+                  id
+                  photos {
+                    original_size {
+                      url
+                    }
+                  }
+                }
+                total_posts
               }
             }
-            total_posts
-          }
-        }`
-    } else if (this.$route.params.filter === "all") {
-      return  gql`
-        query BlogPosts($blogname: String!, $num: Int!) {
-          BlogPosts(blog_name: $blogname, offset: $num) {
-            blog {
-              description
-              title
-              name
-              total_posts
-              updated
-              is_nsfw
-              share_likes
-              is_adult
-              followers
-              likes
-            }
-            posts {
-              post_url
-              caption
-              blog_name
-              summary
-              type
-              note_count
-              liked
-              reblog_key
-              timestamp
-              thumbnail_url
-              video_url
-              id
-              photos {
-                original_size {
-                  url
+          `;
+        } else if (this.$route.params.filter === "all") {
+          return gql`
+            query BlogPosts($blogname: String!, $num: Int!) {
+              BlogPosts(blog_name: $blogname, offset: $num) {
+                blog {
+                  description
+                  title
+                  name
+                  total_posts
+                  updated
+                  is_nsfw
+                  share_likes
+                  is_adult
+                  followers
+                  likes
                 }
+                posts {
+                  post_url
+                  caption
+                  blog_name
+                  summary
+                  type
+                  note_count
+                  liked
+                  reblog_key
+                  timestamp
+                  thumbnail_url
+                  video_url
+                  id
+                  photos {
+                    original_size {
+                      url
+                    }
+                  }
+                }
+                total_posts
               }
             }
-            total_posts
-          }
-        }`}},
+          `;
+        }
+      },
       // Reactive parameters
-    variables() {
+      variables() {
         // Use vue reactive properties here
         return {
           blogname: this.blogname,
           num: (this.$route.params.page * 1 - 1) * 20,
-          filter: this.$route.params.filter,
-        }
+          filter: this.$route.params.filter
+        };
       },
       fetchPolicy: "network-only",
       // Variables: deep object watch

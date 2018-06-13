@@ -34,7 +34,7 @@
       :defaultCurrent="$route.params.page * 1-1"
       @change="onChange "
       showQuickJumper
-      :total="101" />
+      :total="51" />
                         </a-col>
       </a-row>
       </a-card>
@@ -104,12 +104,12 @@ export default {
     checkfilter() {
       if (this.$route.params.filter !== "all") {
         this.var1 = {
-          num: (this.$route.params.page * 1 - 1) * 10,
+          num: (this.$route.params.page * 1 - 1) * 20,
           method: this.$route.params.filter
         };
       }
       if (this.$route.params.filter === "all") {
-        this.var1 = { num: (this.$route.params.page * 1 - 1) * 10 };
+        this.var1 = { num: (this.$route.params.page * 1 - 1) * 20 };
       }
     },
     onChange(pageNumber) {
@@ -128,8 +128,9 @@ export default {
       // eslint-disable-next-line
       this.tstamp = this.Dashboard[this.Dashboard.length - 1].id;
     },
-      onChangeFilter(data){
-      console.log(data.target.value)
+    onChangeFilter(data) {
+      // eslint-disable-next-line
+      console.log(data.target.value);
       this.$router.push({
         name: this.name1,
         params: {
@@ -144,52 +145,53 @@ export default {
     // Advanced query with parameters
     // The 'variables' method is watched by vue
     Dashboard: {
-      query()
-      {
-        if (this.$route.params.filter !== "all"){
+      query() {
+        if (this.$route.params.filter !== "all") {
           return gql`
-        query Dashboard($num: Int, $method: String) {
-          Dashboard(offset: $num, type: $method) {
-            id
-            type
-            id
-            note_count
-            liked
-            reblog_key
-            timestamp
-            thumbnail_url
-            blog_name
-            summary
-            photos {
-              original_size {
-                url
+            query Dashboard($num: Int, $method: String) {
+              Dashboard(offset: $num, type: $method) {
+                id
+                type
+                id
+                note_count
+                liked
+                reblog_key
+                timestamp
+                thumbnail_url
+                blog_name
+                summary
+                photos {
+                  original_size {
+                    url
+                  }
+                }
               }
             }
-          }
-        }
-      `}
-      else if (this.$route.params.filter == "all"){
+          `;
+        } else if (this.$route.params.filter == "all") {
           return gql`
-        query Dashboard($num: Int) {
-          Dashboard(offset: $num) {
-            id
-            type
-            id
-            note_count
-            liked
-            reblog_key
-            timestamp
-            thumbnail_url
-            blog_name
-            summary
-            photos {
-              original_size {
-                url
+            query Dashboard($num: Int) {
+              Dashboard(offset: $num) {
+                id
+                type
+                id
+                note_count
+                liked
+                reblog_key
+                timestamp
+                thumbnail_url
+                blog_name
+                summary
+                photos {
+                  original_size {
+                    url
+                  }
+                }
               }
             }
-          }
+          `;
         }
-      `}},
+      },
       // Reactive parameters
       variables() {
         // Use vue reactive properties here

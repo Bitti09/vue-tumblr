@@ -11,7 +11,7 @@
         notes_info: true,reblog_info: true}"
         fetchPolicy="cache-first">
       <template slot-scope="{ result: { loading, error, data } }">
-        <!-- Loading -->  
+        <!-- Loading -->
         <div v-if="loading" class="loading apollo">Loading...</div>
         <!-- Error -->
         <div v-else-if="error" class="error apollo">
@@ -21,7 +21,7 @@
         type="error"
         message="An error occured"
         showIcon/>
-    </a-card>   
+    </a-card>
          </div>
         <!-- Result -->
         <div v-else-if="data" class="result apollo" style="padding-top: 38px">
@@ -47,10 +47,10 @@
           <a-card
             style="width: 105.7%;margin-top:0px;left:-32px;position:relative;"
             title="Post Caption:">
-          <p 
+          <p
           v-if="data.BlogPosts.posts['0'].caption"
           v-html="data.BlogPosts.posts['0'].caption"></p>
-          <p 
+          <p
           v-else>No Caption</p>
           </a-card>
           </a-card>

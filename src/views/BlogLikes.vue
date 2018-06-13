@@ -27,7 +27,7 @@
       :current="$route.params.page * 1"
       :defaultCurrent="$route.params.page * 1-1"
       @change="onChange"
-      :total="roundnumber(this.BlogLikes.liked_count/10)" />
+      :total="roundnumber(this.BlogLikes.liked_count/20)" />
             </a-col>
       </a-row>
           </a-card></a-affix><br>
@@ -35,7 +35,7 @@
                               <a-card style="width: 100%">
 "{{$route.params.User}}" <a-icon type="heart" />
      {{this.BlogLikes.liked_count}} Posts<br>
-     ( ~ {{roundnumber( this.BlogLikes.liked_count/10)}} Pages )<br>
+     ( ~ {{roundnumber( this.BlogLikes.liked_count/20 )}} Pages )<br>
        <a-alert
        v-if="this.BlogLikes.liked_count > 1000"
       type="warning"
@@ -110,7 +110,7 @@ export default {
     },
     onChange(pageNumber) {
       // eslint-disable-next-line
-      console.log('Page: ', pageNumber);
+      console.log("Page: ", pageNumber);
       if (pageNumber === 1) {
         this.tstamp = 0;
       }
@@ -124,14 +124,13 @@ export default {
         }
       });
     },
-    onChange1(data) {
+    onChange1() {
       this.pages = this.BlogLikes.liked_count;
       if (this.BlogLikes.liked_posts.length > 0) {
         this.BlogLikes.liked_posts.length;
-        this.tstamp =
-          this.BlogLikes.liked_posts[
-            this.BlogLikes.liked_posts.length - 1
-          ].timestamp;
+        this.tstamp = this.BlogLikes.liked_posts[
+          this.BlogLikes.liked_posts.length - 1
+        ].timestamp;
       }
     }
   },
@@ -140,41 +139,51 @@ export default {
   components: {
     CardPics
   },
-   apollo: {
+  apollo: {
     // Advanced query with parameters
     // The 'variables' method is watched by vue
     BlogLikes: {
       query: gql`
-query BlogLikes($blogname: String, $method: String, $num: Int, $limit: Int){
-  BlogLikes(blog_name: $blogname, method: $method, num: $num, limit: $limit){
-    liked_count
-    liked_posts {
-      post_url
-      blog_name
-      summary
-      caption
-      note_count
-      timestamp
-      thumbnail_url
-      video_url
-      id
-      photos {original_size
-        {
-          url
+        query BlogLikes(
+          $blogname: String
+          $method: String
+          $num: Int
+          $limit: Int
+        ) {
+          BlogLikes(
+            blog_name: $blogname
+            method: $method
+            num: $num
+            limit: $limit
+          ) {
+            liked_count
+            liked_posts {
+              post_url
+              blog_name
+              summary
+              caption
+              note_count
+              timestamp
+              thumbnail_url
+              video_url
+              id
+              photos {
+                original_size {
+                  url
+                }
+              }
+            }
+          }
         }
-    }
-  }
-  }
-}
       `,
       // Reactive parameters
       variables() {
         // Use vue reactive properties here
         return {
-        num: (this.$route.params.page * 1 - 1) * 10,
-        blogname: this.$route.params.User,
-        method: 'offset',
-        limit: 10
+          num: (this.$route.params.page * 1 - 1) * 20,
+          blogname: this.$route.params.User,
+          method: "offset",
+          limit: 20
         };
       },
       fetchPolicy: "network-only",
@@ -192,8 +201,9 @@ query BlogLikes($blogname: String, $method: String, $num: Int, $limit: Int){
       // Optional result hook
       // Error handling
       error(error) {
+        // eslint-disable-next-line
         console.error("We've got an error!", error);
-        this.error = 1
+        this.error = 1;
       },
       // Loading state
       // loadingKey is the name of the data property
@@ -202,7 +212,7 @@ query BlogLikes($blogname: String, $method: String, $num: Int, $limit: Int){
       loadingKey: "loadingQueriesCount"
       // watchLoading will be called whenever the loading state changes
     }
-  },
+  }
 };
 </script>
 

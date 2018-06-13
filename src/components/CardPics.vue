@@ -51,9 +51,8 @@
 <style scoped>
 </style>
 <script>
-
-import POST_LIKE from '../graphql/BlogPostsLike.gql'
-import POST_DISLIKE from '../graphql/BlogPostsDisLike.gql'
+import POST_LIKE from "../graphql/BlogPostsLike.gql";
+import POST_DISLIKE from "../graphql/BlogPostsDisLike.gql";
 
 export default {
   props: [
@@ -76,76 +75,76 @@ export default {
       time1: ""
     };
   },
-      methods: {
-      checklike()
-      {
-        if (this.liked == true)
-{        console.log("liked")
-this.dislikepost()
-this.$emit('enlarge-text')
-
-}
-        if (this.liked == false)
-{        console.log("not liked")
-this.likepost()
-this.$emit('enlarge-text')
-}
-
-      },
-   		dislikepost () {
-        const id = this.postid*1
-        const reblog_key = this.reblogkey
-        const var1 = this.var1
-				try {
-					this.$apollo.mutate({
-						mutation: POST_DISLIKE,
-						variables: {
-              id,
+  methods: {
+    checklike() {
+      if (this.liked == true) {
+        // eslint-disable-next-line
+        console.log("liked");
+        this.dislikepost();
+        this.$emit("enlarge-text");
+      }
+      if (this.liked == false) {
+        // eslint-disable-next-line
+        console.log("not liked");
+        this.likepost();
+        this.$emit("enlarge-text");
+      }
+    },
+    dislikepost() {
+      const id = this.postid * 1;
+      const reblog_key = this.reblogkey;
+      try {
+        this.$apollo.mutate({
+          mutation: POST_DISLIKE,
+          variables: {
+            id,
+            reblog_key
+          },
+          optimisticResponse: {
+            __typename: "Mutation",
+            UnlikePost: {
+              __typename: "Like",
               reblog_key,
-						},
-						optimisticResponse: {
-							__typename: 'Mutation',
-							UnlikePost: {
-								__typename: 'Like',
-                reblog_key,
-                id
-							},
-						},
-					})
-				} catch (e) {
-					console.error(e)
-					//this.label = label
-        }
-      },   
-		likepost () {
-        const id = this.postid*1
-        const reblog_key = this.reblogkey
-        const var1 = this.var1
-				try {
-					this.$apollo.mutate({
-						mutation: POST_LIKE,
-						variables: {
-              id,
+              id
+            }
+          }
+        });
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e);
+        //this.label = label
+      }
+    },
+    likepost() {
+      const id = this.postid * 1;
+      const reblog_key = this.reblogkey;
+      try {
+        this.$apollo.mutate({
+          mutation: POST_LIKE,
+          variables: {
+            id,
+            reblog_key
+          },
+          optimisticResponse: {
+            __typename: "Mutation",
+            LikePost: {
+              __typename: "Like",
               reblog_key,
-						},
-						optimisticResponse: {
-							__typename: 'Mutation',
-							LikePost: {
-								__typename: 'Like',
-                reblog_key,
-                id
-							},
-						},
-					})
-				} catch (e) {
-					console.error(e)
-					//this.label = label
-        }
-      },
-      refresh1()
-      {     
-console.log(this.$parent)}
-		},
+              id
+            }
+          }
+        });
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e);
+        //this.label = label
+      }
+    },
+    refresh1() {
+      // eslint-disable-next-line
+      console.log(this.$parent);
+    }
+  },
   computed: {
     vardetail() {
       var x = {

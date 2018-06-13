@@ -35,8 +35,8 @@
 .ant-card-actions {
   min-height: 46px !important;
   max-height: 46px !important;
-  position:absolute;
-  bottom:0;
+  position: absolute;
+  bottom: 0;
   width: 100%;
 }
 p {
