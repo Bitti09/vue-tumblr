@@ -207,8 +207,8 @@ export default {
         name: this.name1,
         params: {
           page: pageNumber,
-          filter: this.filter1,
-          User: this.blog1
+          filter: this.$route.params.filter,
+          User: this.$route.params.User
         }
       });
     },
