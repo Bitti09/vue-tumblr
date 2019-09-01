@@ -1,78 +1,82 @@
 <template>
   <div class="apollo-example">
     <!-- Apollo watched Graphql query -->
-       <!-- Loading -->
-       <div v-if="$apollo.queries.Dashboard.loading">Loading...</div>
+    <!-- Loading -->
+    <div v-if="$apollo.queries.Dashboard.loading">Loading...</div>
 
-       <!-- Error -->
-        <div v-else-if="this.error" class="error apollo">
-                   <a-card      style="width: 100%;padding-top: 10px; height: 100%">
-         <a-alert
-        type="error"
-        message="An error occured"
-        showIcon/>
-    </a-card>
-       </div>
-       <!-- Result -->
-       <div v-else-if="!$apollo.queries.Dashboard.loading"  class="result apollo">
-  <a-affix :offsetTop="50" >
-    <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
-                           <a-row >
-            <a-col :span="6">
-            <a-radio-group @change="onChangeFilter" :defaultValue="$route.params.filter">
-        <a-radio-button value="all">All</a-radio-button>
-        <a-radio-button value="photo">Photos only</a-radio-button>
-        <a-radio-button value="video">Video only</a-radio-button>
-        <a-radio-button value="d" disabled>Answers only</a-radio-button>
-      </a-radio-group>
-            </a-col>
-                  <a-col :span="10" :offset="2">
-    <a-pagination
-      :showTotal="total => `Total ${total} Pages`"
-      :pageSize="1"
-      :current="$route.params.page * 1"
-      :defaultCurrent="$route.params.page * 1-1"
-      @change="onChange "
-      showQuickJumper
-      :total="51" />
-                        </a-col>
-      </a-row>
+    <!-- Error -->
+    <div v-else-if="this.error" class="error apollo">
+      <a-card style="width: 100%;padding-top: 10px; height: 100%">
+        <a-alert type="error" message="An error occured" showIcon />
       </a-card>
-      </a-affix><br>
-    <a-row type="flex" justify="start" align="top">
-      <span v-for="post in this.Dashboard"  :key="post.index">
-          <a-col :xl="10" >
-<CardPics v-if="post.type ==='photo'"
- v-on:enlarge-text="test()"
-        :picurl="post.photos['0'].original_size.url"
-        :notecount="post.note_count"
-        :piccount="post.photos.length"
-        :liked="post.liked"
-        :postid="post.id"
-        :reblogkey="post.reblog_key"
-        :blogname="post.blog_name"
-        :summary="post.summary"
-        :timestamp="post.timestamp"
-        :video="0" />
-<CardPics v-if="post.type ==='video'"
- v-on:enlarge-text="test()"
-        :picurl="post.thumbnail_url"
-        :notecount="post.note_count"
-        :piccount="1"
-        :liked="post.liked"
-        :postid="post.id"
-        :reblogkey="post.reblog_key"
-        :blogname="post.blog_name"
-        :summary="post.summary"
-        :timestamp="post.timestamp"
-        :video="1" />
-</a-col>
-      </span>
-  </a-row>
-              <div v-if="this.Dashboard.length === 0" >
+    </div>
+    <!-- Result -->
+    <div v-else-if="!$apollo.queries.Dashboard.loading" class="result apollo">
+      <a-affix :offsetTop="50">
+        <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
+          <a-row>
+            <a-col :span="6">
+              <a-radio-group @change="onChangeFilter" :defaultValue="$route.params.filter">
+                <a-radio-button value="all">All</a-radio-button>
+                <a-radio-button value="photo">Photos only</a-radio-button>
+                <a-radio-button value="video">Video only</a-radio-button>
+                <a-radio-button value="d" disabled>Answers only</a-radio-button>
+              </a-radio-group>
+            </a-col>
+            <a-col :span="10" :offset="2">
+              <a-pagination
+                :showTotal="total => `Total ${total} Pages`"
+                :pageSize="1"
+                :current="$route.params.page * 1"
+                :defaultCurrent="$route.params.page * 1 - 1"
+                @change="onChange"
+                showQuickJumper
+                :total="51"
+              />
+            </a-col>
+          </a-row>
+        </a-card>
+      </a-affix>
+      <br />
+      <a-row type="flex" justify="start" align="top">
+        <span v-for="post in this.Dashboard" :key="post.index">
+          <a-col :xl="10">
+            <CardPics
+              v-if="post.type === 'photo'"
+              v-on:enlarge-text="test()"
+              :picurl="post.photos['0'].original_size.url"
+              :notecount="post.note_count"
+              :piccount="post.photos.length"
+              :liked="post.liked"
+              :postid="post.id"
+              :reblogkey="post.reblog_key"
+              :blogname="post.blog_name"
+              :summary="post.summary"
+              :timestamp="post.timestamp"
+              :video="0"
+            />
+            <CardPics
+              v-if="post.type === 'video'"
+              v-on:enlarge-text="test()"
+              :picurl="post.thumbnail_url"
+              :notecount="post.note_count"
+              :piccount="1"
+              :liked="post.liked"
+              :postid="post.id"
+              :reblogkey="post.reblog_key"
+              :blogname="post.blog_name"
+              :summary="post.summary"
+              :timestamp="post.timestamp"
+              :video="1"
+              :videourl="post.video_url"
+            />
+          </a-col>
+        </span>
+      </a-row>
+      <div v-if="this.Dashboard.length === 0">
         <a-alert variant="danger">No more liked Posts found</a-alert>
-</div>
-</div>
+      </div>
+    </div>
     <!-- No result -->
     <div v-else class="no-result apollo">No result :(</div>
   </div>
@@ -159,6 +163,7 @@ export default {
                 timestamp
                 thumbnail_url
                 blog_name
+                video_url
                 summary
                 photos {
                   original_size {

@@ -1,22 +1,13 @@
 <template>
   <a-card hoverable style="width: 20rem">
-    <img v-if="!video" alt="example" v-img:name :src="picurl" slot="cover" style="height: 15rem" />
     <img
-      v-else
       alt="example"
+      v-img:name
       :src="picurl"
       slot="cover"
       style="height: 15rem"
-      @click="show(postid.toString())"
     />
-    <modal v-if="video" height="60%" :name="postid.toString()">
-      <d-player
-        style="width: 100%;height: 100%"
-        v-if="this.videotype !== 'youtube'"
-        :options="options1"
-      ></d-player>
-    </modal>
-    <template class="ant-card-actions" slot="actions">
+    <ul class="ant-card-actions" slot="actions">
       <li style="width: 33%;">
         <a-icon v-if="!video" type="picture" />
         <a-icon v-if="video" type="video-camera" />
@@ -31,7 +22,7 @@
           <a-icon type="caret-right" />Details
         </router-link>
       </li>
-    </template>
+    </ul>
     <ul class="time ant-card-actions">
       <li style="width: 70%;">
         <a-icon type="clock-circle-o" />
@@ -75,8 +66,7 @@ export default {
     "summary",
     "reblogkey",
     "timestamp",
-    "video",
-    "videourl"
+    "video"
   ],
   data() {
     return {
@@ -84,15 +74,6 @@ export default {
     };
   },
   computed: {
-    options1() {
-      var video = {
-        url: this.videourl
-      };
-      var options = {
-        video: video
-      };
-      return options;
-    },
     vars() {
       var x = {
         name: "PostDetail",
@@ -109,12 +90,6 @@ export default {
     }
   },
   methods: {
-    show(id) {
-      this.$modal.show(id);
-    },
-    hide(id) {
-      this.$modal.hide(id);
-    },
     checklike() {
       if (this.liked == true) {
         //console.log("liked");

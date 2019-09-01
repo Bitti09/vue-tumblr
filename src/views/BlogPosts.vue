@@ -1,143 +1,153 @@
 <template>
-  <div class="apollo-example"  >
+  <div class="apollo-example">
     <!-- Apollo watched Graphql query -->
-        <!-- Loading -->
-        <div v-if="$apollo.queries.BlogPosts.loading" class="loading apollo">Loading...</div>
-        <!-- Error -->
-        <div v-else-if="this.error" class="error apollo">
-        <a-card
-        style="width: 100%;padding-top: 10px; height: 100%">
-        <a-alert
-        type="error"
-        message="An error occured"
-        showIcon/>
-       </a-card>
-        </div>
-        <!-- Result -->
-        <div v-else-if="this.BlogPosts"  class="result apollo" >
-  <a-affix :offsetTop="50" >
-    <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
-                     <a-row >
+    <!-- Loading -->
+    <div v-if="$apollo.queries.BlogPosts.loading" class="loading apollo">
+      Loading...
+    </div>
+    <!-- Error -->
+    <div v-else-if="this.error" class="error apollo">
+      <a-card style="width: 100%;padding-top: 10px; height: 100%">
+        <a-alert type="error" message="An error occured" showIcon />
+      </a-card>
+    </div>
+    <!-- Result -->
+    <div v-else-if="this.BlogPosts" class="result apollo">
+      <a-affix :offsetTop="50">
+        <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
+          <a-row>
             <a-col :span="8">
-            <a-radio-group @change="onChangeFilter" :defaultValue="$route.params.filter">
-        <a-radio-button value="all">All</a-radio-button>
-        <a-radio-button value="photo">Photos only</a-radio-button>
-        <a-radio-button value="video">Video only</a-radio-button>
-        <a-radio-button value="d" disabled>Answers only</a-radio-button>
-      </a-radio-group>
+              <a-radio-group
+                @change="onChangeFilter"
+                :defaultValue="$route.params.filter"
+              >
+                <a-radio-button value="all">All</a-radio-button>
+                <a-radio-button value="photo">Photos only</a-radio-button>
+                <a-radio-button value="video">Video only</a-radio-button>
+                <a-radio-button value="d" disabled>Answers only</a-radio-button>
+              </a-radio-group>
             </a-col>
-                  <a-col :span="12" :offset="-1">
-  <a-pagination
-       :showTotal="total => `Total ${total} Pages`"
-      :pageSize="1"
-      :current="$route.params.page * 1"
-      :defaultCurrent="$route.params.page * 1-1"
-      @change="onChange"
-      showQuickJumper
-      :total="roundnumber( this.BlogPosts.total_posts/20,this.BlogPosts.total_posts)" />
-                  </a-col>
-      </a-row>
-          </a-card>
-  </a-affix>
-          <a-card style="width: 100%, marginTop: '54px">
-                      <a-card
-          style="width: 100%"
-          :title="this.BlogPosts.blog.title">
-          </a-card>
+            <a-col :span="12" :offset="-1">
+              <a-pagination
+                :showTotal="total => `Total ${total} Pages`"
+                :pageSize="1"
+                :current="$route.params.page * 1"
+                :defaultCurrent="$route.params.page * 1 - 1"
+                @change="onChange"
+                showQuickJumper
+                :total="
+                  roundnumber(
+                    this.BlogPosts.total_posts / 20,
+                    this.BlogPosts.total_posts
+                  )
+                "
+              />
+            </a-col>
+          </a-row>
+        </a-card>
+      </a-affix>
+      <a-card style="width: 100%, marginTop: '54px">
+        <a-card style="width: 100%" :title="this.BlogPosts.blog.title"></a-card>
         <a-row type="flex" justify="start" align="top">
-           <a-card
-      style="width: 20%;height: 189.233px"
-          title="Blog Name:">
-          <span>{{this.BlogPosts.blog.name}}</span>
+          <a-card style="width: 20%;height: 189.233px" title="Blog Name:">
+            <span>{{ this.BlogPosts.blog.name }}</span>
           </a-card>
           <a-card
-      style="width: 20%;height: 189.233px"
-          title="Last Updated  on:">
-          <span>{{ this.BlogPosts.blog.updated | moment("DD.MM.YYYY HH:MM") }}</span><br>
-          <span>~ {{ tago(this.BlogPosts.blog.updated) }}</span>
+            style="width: 20%;height: 189.233px"
+            title="Last Updated  on:"
+          >
+            <span>
+              {{ this.BlogPosts.blog.updated | moment("DD.MM.YYYY HH:MM") }}
+            </span>
+            <br />
+            <span>~ {{ tago(this.BlogPosts.blog.updated) }}</span>
           </a-card>
           <a-card
-      style="width: 20%;height: 189.233px"
-          title="Total No of Posts:">
-          <span>{{ this.BlogPosts.total_posts}}</span><br>
-          ( ~ {{roundnumber( this.BlogPosts.total_posts/20,0)}} Pages )<br>
+            style="width: 20%;height: 189.233px"
+            title="Total No of Posts:"
+          >
+            <span>{{ this.BlogPosts.total_posts }}</span>
+            <br />
+            ( ~ {{ roundnumber(this.BlogPosts.total_posts / 20, 0) }} Pages )
+            <br />
           </a-card>
-                    <a-card
-      style="width: 40%;height: 189.233px"
-          :title="blogshare(this.BlogPosts.blog.name)">
-          <span v-if="this.BlogPosts.blog.share_likes">
-         <router-link
-           :to="vars">
-     <a-alert
-      message="YES, view them"
-      type="success"
-      showIcon/>
-          </router-link>
-    </span><br>
-          <span v-if="!this.BlogPosts.blog.share_likes">
-            <a-alert
-      type="error"
-      message="NO"
-      showIcon
-    ></a-alert></span><br>
-
+          <a-card
+            style="width: 40%;height: 189.233px"
+            :title="blogshare(this.BlogPosts.blog.name)"
+          >
+            <span v-if="this.BlogPosts.blog.share_likes">
+              <router-link :to="vars">
+                <a-alert message="YES, view them" type="success" showIcon />
+              </router-link>
+            </span>
+            <br />
+            <span v-if="!this.BlogPosts.blog.share_likes">
+              <a-alert type="error" message="NO" showIcon></a-alert>
+            </span>
+            <br />
           </a-card>
         </a-row>
-      <a-card
-      v-if="this.BlogPosts.blog.description"
-      style="width: 100%"
-          title="Blog Description:">
+        <a-card
+          v-if="this.BlogPosts.blog.description"
+          style="width: 100%"
+          title="Blog Description:"
+        >
           <span v-html="this.BlogPosts.blog.description"></span>
-          </a-card>
-</a-card>
-<br>
-    <a-row type="flex" justify="start" align="top">
-        <div  v-for="(post, index) in test11(this.BlogPosts.posts)" :key="index">
-                    <a-col :xl="10" >
-<CardBlogPics v-if="post.type ==='photo'"
- v-on:enlarge-text="test()"
-        :picurl="post.photos['0'].original_size.url"
-        :notecount="post.note_count"
-        :piccount="post.photos.length"
-        :liked="post.liked"
-        :postid="post.id"
-        :var1="var11"
-        :reblogkey="post.reblog_key"
-        :blogname="post.blog_name"
-        :summary="post.summary"
-        :timestamp="post.timestamp"
-        :video="0" />
-        <CardBlogPics v-if="post.type ==='video' && post.thumbnail_url"
-         v-on:enlarge-text="test()"
-                :picurl="post.thumbnail_url"
-                :notecount="post.note_count"
-                :piccount="1"
-                :liked="post.liked"
-                :postid="post.id"
-                :var1="var11"
-                :reblogkey="post.reblog_key"
-                :blogname="post.blog_name"
-                :summary="post.summary"
-                :timestamp="post.timestamp"
-                :video="1" />
-      </a-col>
+        </a-card>
+      </a-card>
+      <br />
+      <a-row type="flex" justify="start" align="top">
+        <div v-for="(post, index) in test11(this.BlogPosts.posts)" :key="index">
+          <a-col :xl="10">
+            <CardBlogPics
+              v-if="post.type === 'photo' && post.photos[0]"
+              v-on:enlarge-text="test()"
+              :picurl="post.photos['0'].original_size.url"
+              :notecount="post.note_count"
+              :piccount="post.photos.length"
+              :liked="post.liked"
+              :postid="post.id"
+              :var1="var11"
+              :reblogkey="post.reblog_key"
+              :blogname="post.blog_name"
+              :summary="post.summary"
+              :timestamp="post.timestamp"
+              :video="0"
+            />
+            <CardBlogPics
+              v-if="post.type === 'video' && UrlExists(post.video_url)"
+              v-on:enlarge-text="test()"
+              :picurl="post.thumbnail_url"
+              :notecount="post.note_count"
+              :piccount="1"
+              :liked="post.liked"
+              :postid="post.id"
+              :var1="var11"
+              :reblogkey="post.reblog_key"
+              :blogname="post.blog_name"
+              :summary="post.summary"
+              :timestamp="post.timestamp"
+              :video="1"
+              :videourl="post.video_url"
+            />
+          </a-col>
+        </div>
+      </a-row>
+      <div v-if="this.BlogPosts.posts.length === 0">
+        <a-alert
+          v-if="this.$route.params.filter == 'all'"
+          type="error"
+          message="No more liked Posts found"
+          showIcon
+        />
+        <a-alert
+          v-if="this.$route.params.filter !== 'all'"
+          type="error"
+          message="No more liked Posts found for the current active filter"
+          showIcon
+        />
       </div>
-    </a-row>
-              <div v-if="this.BlogPosts.posts.length === 0" >
-      <a-alert
-      v-if="this.$route.params.filter =='all'"
-      type="error"
-      message="No more liked Posts found"
-      showIcon
-    />
-      <a-alert
-      v-if="this.$route.params.filter !=='all'"
-      type="error"
-      message="No more liked Posts found for the current active filter"
-      showIcon
-    />
-</div>
-</div>
+    </div>
     <!-- No result -->
     <div v-else class="no-result apollo">No result :(</div>
   </div>
@@ -173,6 +183,20 @@ export default {
   methods: {
     test() {
       // console.log(this.$apollo.queries.BlogPosts.refetch());
+    },
+    UrlExists(url) {
+      // eslint-disable-next-line
+      console.log(url);
+      var http = new XMLHttpRequest();
+      http.open("HEAD", url, false);
+      http.send();
+      // eslint-disable-next-line
+      console.log(http.status);
+      if (http.status != 404 && http.status != 403) {
+        return true;
+      } else {
+        return false;
+      }
     },
     onChangeFilter(data) {
       // eslint-disable-next-line

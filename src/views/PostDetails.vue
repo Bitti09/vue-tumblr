@@ -1,87 +1,98 @@
 <template>
   <div class="apollo-example">
     <!-- Apollo watched Graphql query -->
-        <!-- Loading -->
-        <div v-if="$apollo.queries.BlogPosts.loading" class="loading apollo">{{this.BlogPosts}}</div>
-        <!-- Error -->
-        <div v-else-if="this.error" class="error apollo">
+    <!-- Loading -->
+    <div v-if="$apollo.queries.BlogPosts.loading" class="loading apollo">
+      {{ this.BlogPosts }}
+    </div>
+    <!-- Error -->
+    <div v-else-if="this.error" class="error apollo">
+      <a-card style="width: 100%;padding-top: 10px; height: 100%">
+        <a-alert type="error" message="An error occured" showIcon />
+      </a-card>
+    </div>
+    <!-- Result -->
+    <div
+      v-else-if="this.BlogPosts"
+      class="result apollo"
+      style="padding-top: 38px"
+    >
+      <a-card
+        style="width: 100%;margin-top:10px"
+        :title="this.BlogPosts.blog.title"
+      >
+        <a-row
+          type="flex"
+          justify="start"
+          align="top"
+          style="width: 105.7%;margin-top:-24px;left:-32px;position:relative;"
+        >
+          <a-card style="width: 50%;height: 140.233px" title="Post Summary:">
+            <span v-if="this.BlogPosts.posts['0'].summary">{{
+              this.BlogPosts.posts["0"].summary
+            }}</span>
+            <span v-else>No Summary</span>
+          </a-card>
+          <a-card style="width: 50%;height: 140.233px" title="Posted  on:">
+            <span>{{
+              this.BlogPosts.posts["0"].timestamp | moment("DD.MM.YYYY HH:MM")
+            }}</span>
+            <br />
+            <span>~ {{ tago(this.BlogPosts.posts["0"].timestamp) }}</span>
+          </a-card>
+        </a-row>
+        <br />
         <a-card
-        style="width: 100%;padding-top: 10px; height: 100%">
-         <a-alert
-        type="error"
-        message="An error occured"
-        showIcon/>
-    </a-card>
-         </div>
-        <!-- Result -->
-        <div v-else-if="this.BlogPosts" class="result apollo" style="padding-top: 38px">
-          <a-card style="width: 100%;margin-top:10px" :title="this.BlogPosts.blog.title">
-          <a-row type="flex" justify="start" align="top" style="width: 105.7%;margin-top:-24px;left:-32px;position:relative;">
-          <a-card
-          style="width: 50%;height: 140.233px"
-          title="Post Summary:">
-          <span
-          v-if="this.BlogPosts.posts['0'].summary">
-          {{this.BlogPosts.posts['0'].summary}}
-          </span>
-          <span v-else>
-            No Summary
-          </span>
-          </a-card>
-          <a-card
-          style="width: 50%;height: 140.233px"
-          title="Posted  on:">
-          <span>{{ this.BlogPosts.posts['0'].timestamp | moment("DD.MM.YYYY HH:MM") }}</span><br>
-          <span>~ {{ tago(this.BlogPosts.posts['0'].timestamp) }}</span>
-          </a-card></a-row><br>
-          <a-card
-            style="width: 105.7%;margin-top:0px;left:-32px;position:relative;"
-            title="Post Caption:">
+          style="width: 105.7%;margin-top:0px;left:-32px;position:relative;"
+          title="Post Caption:"
+        >
           <p
-          v-if="this.BlogPosts.posts['0'].caption"
-          v-html="this.BlogPosts.posts['0'].caption"></p>
-          <p
-          v-else>No Caption</p>
-          </a-card>
-          </a-card>
-          <br>
-          <a-row type="flex" justify="start" align="top">
-          <!-- Pic Cards -->
+            v-if="this.BlogPosts.posts['0'].caption"
+            v-html="this.BlogPosts.posts['0'].caption"
+          ></p>
+          <p v-else>No Caption</p>
+        </a-card>
+      </a-card>
+      <br />
+      <a-row type="flex" justify="start" align="top">
+        <!-- Pic Cards -->
+        <div v-if="this.BlogPosts.posts['0'].photos">
           <div
-          v-if="this.BlogPosts.posts['0'].photos">
-          <div
-            v-for="(post, index,length) in this.BlogPosts.posts['0'].photos"
-            :key="post.index">
-            {{length}}
+            v-for="(post, index, length) in this.BlogPosts.posts['0'].photos"
+            :key="post.index"
+          >
+            {{ length }}
             <CardPicDetails
               :img-src="post.original_size.url"
               :index1="index"
-              :index2="piccount()">
-            </CardPicDetails>
+              :index2="piccount()"
+            ></CardPicDetails>
           </div>
         </div>
-    </a-row>
-<!-- Vid Cards -->
-<div
-v-if="this.BlogPosts.posts['0'].thumbnail_url">
-<CardVidDetails
-            :img-src="this.BlogPosts.posts['0'].thumbnail_url"
-            :vid-src="this.BlogPosts.posts['0'].video_url"
-            :videotype="this.BlogPosts.posts['0'].video_type"
-            :vidSrc2="this.BlogPosts.posts['0'].permalink_url">
-</CardVidDetails>
-</div>
-<br>
-<!-- Tag Cards -->
-<CardTagDetails v-if="this.BlogPosts.posts['0'].tags"
-            :tags="this.BlogPosts.posts['0'].tags">
-</CardTagDetails><br>
-<CardNoteDetails v-if="this.BlogPosts.posts['0'].notes"
-            :notes="this.BlogPosts.posts['0'].notes"
-            :reblogid="this.BlogPosts.posts['0'].reblogged_root_id"
-            :reblogname="this.BlogPosts.posts['0'].reblogged_root_name">
-</CardNoteDetails>
-</div>
+      </a-row>
+      <!-- Vid Cards -->
+      <div v-if="this.BlogPosts.posts['0'].thumbnail_url">
+        <CardVidDetails
+          :img-src="this.BlogPosts.posts['0'].thumbnail_url"
+          :vid-src="this.BlogPosts.posts['0'].video_url"
+          :videotype="this.BlogPosts.posts['0'].video_type"
+          :vidSrc2="this.BlogPosts.posts['0'].permalink_url"
+        ></CardVidDetails>
+      </div>
+      <br />
+      <!-- Tag Cards -->
+      <CardTagDetails
+        v-if="this.BlogPosts.posts['0'].tags"
+        :tags="this.BlogPosts.posts['0'].tags"
+      ></CardTagDetails>
+      <br />
+      <CardNoteDetails
+        v-if="this.BlogPosts.posts['0'].notes"
+        :notes="this.BlogPosts.posts['0'].notes"
+        :reblogid="this.BlogPosts.posts['0'].reblogged_root_id"
+        :reblogname="this.BlogPosts.posts['0'].reblogged_root_name"
+      ></CardNoteDetails>
+    </div>
     <!-- No result -->
     <div v-else class="no-result apollo">No result :(</div>
   </div>
