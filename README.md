@@ -1,6 +1,3 @@
-[![bitHound Dependencies](https://www.bithound.io/github/Bitti09/vue-tumblr/badges/dependencies.svg)](https://www.bithound.io/github/Bitti09/vue-tumblr/master/dependencies/npm)
-[![bitHound Dev Dependencies](https://www.bithound.io/github/Bitti09/vue-tumblr/badges/devDependencies.svg)](https://www.bithound.io/github/Bitti09/vue-tumblr/master/dependencies/npm)
-
 # Vue -Tumblr
 
 A small Tumblr Viewer based on Vue with ant Design
