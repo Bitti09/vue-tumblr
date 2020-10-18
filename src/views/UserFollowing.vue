@@ -1,51 +1,51 @@
 <template>
   <div class="apollo-example">
     <!-- Apollo watched Graphql query -->
-        <!-- Loading -->
-        <div v-if="$apollo.queries.UserFollowing.loading">Loading...</div>
-        <!-- Error -->
-        <div v-else-if="this.error" class="error apollo">
-        <a-card
-        style="width: 100%;padding-top: 10px; height: 100%">
-         <a-alert
-        type="error"
-        message="An error occured"
-        showIcon/>
-    </a-card>          </div>
-        <!-- Result -->
-        <div v-else-if="this.UserFollowing" class="result apollo" style="padding-top: 5px;">
-                                <a-affix :offsetTop="50" >
-    <a-card style="width: 100%;padding-top: 10px; height: 80px">
-                      <a-pagination       :showTotal="total => `Total ${total} Pages`"
-      :pageSize="1"
-      :current="$route.params.page * 1"
-      :defaultCurrent="$route.params.page * 1-1"
-      @change="onChange"
-      showQuickJumper
-      :total="roundnumber( this.UserFollowing.total_blogs/10)" /></a-card></a-affix>
-    <a-row type="flex" justify="start" align="top" style="padding-top: 20px;">
-        <div  v-for="post in this.UserFollowing.blogs"  :key="post.index">
-              <a-col>
-<CardFollow
-        :title="post.title"
-        :followers="post.followers"
-        :likes="post.liked"
-        :publicfollow="post.share_likes"
-        :postid="post.id"
-        :blog_name="post.name"
-        :summary="post.description"
-        :timestamp="post.updated" />
-                    </a-col>
+    <!-- Loading -->
+    <div v-if="$apollo.queries.UserFollowing.loading">Loading...</div>
+    <!-- Error -->
+    <div v-else-if="this.error" class="error apollo">
+      <a-card style="width: 100%; padding-top: 10px; height: 100%">
+        <a-alert type="error" message="An error occured" showIcon />
+      </a-card>
+    </div>
+    <!-- Result -->
+    <div
+      v-else-if="this.UserFollowing"
+      class="result apollo"
+      style="padding-top: 5px"
+    >
+      <a-affix :offsetTop="50">
+        <a-card style="width: 100%; padding-top: 10px; height: 80px">
+          <a-pagination
+            :showTotal="(total) => `Total ${total} Pages`"
+            :pageSize="1"
+            :current="$route.params.page * 1"
+            :defaultCurrent="$route.params.page * 1 - 1"
+            @change="onChange"
+            showQuickJumper
+            :total="roundnumber(this.UserFollowing.total_blogs / 10)" /></a-card
+      ></a-affix>
+      <a-row type="flex" justify="start" align="top" style="padding-top: 20px">
+        <div v-for="post in this.UserFollowing.blogs" :key="post.index">
+          <a-col>
+            <CardFollow
+              :title="post.title"
+              :followers="post.followers"
+              :likes="post.liked"
+              :publicfollow="post.share_likes"
+              :postid="post.id"
+              :blog_name="post.name"
+              :summary="post.description"
+              :timestamp="post.updated"
+            />
+          </a-col>
+        </div>
+      </a-row>
+      <div v-if="this.UserFollowing.blogs.length === 0">
+        <a-alert type="error" message="No more followed Users found" showIcon />
       </div>
-    </a-row>
-              <div v-if="this.UserFollowing.blogs.length === 0" >
-                            <a-alert
-      type="error"
-      message="No more followed Users found"
-      showIcon
-    />
-</div>
-</div>
+    </div>
     <!-- No result -->
     <div v-else class="no-result apollo">No result :(</div>
   </div>
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       error: 0,
-      UserFollowing: {}
+      UserFollowing: {},
     };
   },
   methods: {
@@ -93,10 +93,10 @@ export default {
         name: this.name1,
         params: {
           page: pageNumber,
-          tstamp: this.tstamp
-        }
+          tstamp: this.tstamp,
+        },
       });
-    }
+    },
   },
   mounted() {
     this.checkfilter();
@@ -109,10 +109,10 @@ export default {
       this.checkfilter();
       // eslint-disable-next-line
       console.log(this.$route.params);
-    }
+    },
   },
   components: {
-    CardFollow
+    CardFollow,
   },
   apollo: {
     // Advanced query with parameters
@@ -138,7 +138,7 @@ export default {
       variables() {
         // Use vue reactive properties here
         return {
-          num: (this.$route.params.page * 1 - 1) * 10
+          num: (this.$route.params.page * 1 - 1) * 10,
         };
       },
       fetchPolicy: "network-only",
@@ -164,10 +164,10 @@ export default {
       // loadingKey is the name of the data property
       // that will be incremented when the query is loading
       // and decremented when it no longer is.
-      loadingKey: "loadingQueriesCount"
+      loadingKey: "loadingQueriesCount",
       // watchLoading will be called whenever the loading state changes
-    }
-  }
+    },
+  },
 };
 </script>
 

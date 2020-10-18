@@ -1,72 +1,70 @@
 <template>
   <div class="apollo-example">
     <!-- Apollo watched Graphql query -->
-        <!-- Loading -->
-        <div v-if="$apollo.queries.UserLikes.loading">Loading...</div>
-        <!-- Error -->
-        <div v-else-if="error" class="error apollo">
-          <a-card      style="width: 100%;padding-top: 10px; height: 100%">
-     <a-alert
-      type="error"
-      :message="error.message"
-      showIcon
-    /></a-card>
-        </div>
+    <!-- Loading -->
+    <div v-if="$apollo.queries.UserLikes.loading">Loading...</div>
+    <!-- Error -->
+    <div v-else-if="error" class="error apollo">
+      <a-card style="width: 100%; padding-top: 10px; height: 100%">
+        <a-alert type="error" :message="error.message" showIcon
+      /></a-card>
+    </div>
 
-        <!-- Result -->
-        <div v-else-if="this.UserLikes"   class="result apollo">
-                      <a-affix :offsetTop="50" >
-    <a-card style="width: 100%;padding-top: 10px; height: 85px">
-      <a-pagination       :showTotal="total => `Total ${total} Pages`"
-      :pageSize="1"
-      :current="$route.params.page * 1"
-      :defaultCurrent="$route.params.page * 1-1"
-      @change="onChange"
-      showQuickJumper
-      :total="roundnumber( this.UserLikes.liked_count/10)" />
-
-      </a-card>
-                      </a-affix><br>
-                    <a-card style="width: 100%">
-                      <br>
-You <a-icon type="heart" />
-     {{this.UserLikes.liked_count}} Posts<br>
-                    </a-card><br>
-        <div v-if="this.UserLikes.liked_posts.length > 0" >
-    <a-row type="flex" justify="start" align="top">
-             <div   v-for="post in this.UserLikes.liked_posts"  :key="post.index">
-                         <a-col :xl="10" >
-             <!-- Pic Cards -->
-     <CardPics v-if="post.photos"
-             :picurl="post.photos['0'].original_size.url"
-             :notecount="post.note_count * 1"
-             :piccount="post.photos.length * 1"
-             :liked="post.liked"
-             :postid="post.id"
-             :blogname="post.blog_name"
-             :summary="post.summary"
-             :timestamp="post.timestamp" />
-             <CardPics v-if="post.thumbnail_url"
-                     :picurl="post.thumbnail_url"
-                     :notecount="post.note_count"
-                     :video="1"
-                     :liked="post.liked"
-                     :postid="post.id"
-                     :blogname="post.blog_name"
-                     :summary="post.summary"
-                     :timestamp="post.timestamp" />
-                         </a-col>
-                   </div>
-    </a-row>
+    <!-- Result -->
+    <div v-else-if="this.UserLikes" class="result apollo">
+      <a-affix :offsetTop="50">
+        <a-card style="width: 100%; padding-top: 10px; height: 85px">
+          <a-pagination
+            :showTotal="(total) => `Total ${total} Pages`"
+            :pageSize="1"
+            :current="$route.params.page * 1"
+            :defaultCurrent="$route.params.page * 1 - 1"
+            @change="onChange"
+            showQuickJumper
+            :total="roundnumber(this.UserLikes.liked_count / 10)"
+          />
+        </a-card> </a-affix
+      ><br />
+      <a-card style="width: 100%">
+        <br />
+        You <a-icon type="heart" />
+        {{ this.UserLikes.liked_count }} Posts<br /> </a-card
+      ><br />
+      <div v-if="this.UserLikes.liked_posts.length > 0">
+        <a-row type="flex" justify="start" align="top">
+          <div v-for="post in this.UserLikes.liked_posts" :key="post.index">
+            <a-col :xl="10">
+              <!-- Pic Cards -->
+              <CardPics
+                v-if="post.photos"
+                :picurl="post.photos['0'].original_size.url"
+                :notecount="post.note_count * 1"
+                :piccount="post.photos.length * 1"
+                :liked="post.liked"
+                :postid1="post.id_string"
+                :blogname="post.blog_name"
+                :summary="post.summary"
+                :timestamp="post.timestamp"
+              />
+              <CardPics
+                v-if="post.thumbnail_url"
+                :picurl="post.thumbnail_url"
+                :notecount="post.note_count"
+                :video="1"
+                :liked="post.liked"
+                :postid1="post.id_string"
+                :blogname="post.blog_name"
+                :summary="post.summary"
+                :timestamp="post.timestamp"
+              />
+            </a-col>
           </div>
-      <div v-if="this.UserLikes.liked_posts.length === 0" >
-        <a-alert
-      type="error"
-      message="No more liked Posts found"
-      showIcon
-    />
-</div>
-</div>
+        </a-row>
+      </div>
+      <div v-if="this.UserLikes.liked_posts.length === 0">
+        <a-alert type="error" message="No more liked Posts found" showIcon />
+      </div>
+    </div>
     <!-- No result -->
     <div v-else class="no-result apollo">No result :(</div>
   </div>
@@ -91,13 +89,13 @@ export default {
         name: this.name1,
         params: {
           page: pageNumber,
-          tstamp: this.tstamp
-        }
+          tstamp: this.tstamp,
+        },
       });
-    }
+    },
   },
   components: {
-    CardPics
+    CardPics,
   },
   data() {
     return {
@@ -105,7 +103,7 @@ export default {
       UserLikes: {},
       error: 0,
       filter1: this.$route.params.filter,
-      blog1: this.$route.params.User
+      blog1: this.$route.params.User,
     };
   },
   apollo: {
@@ -121,6 +119,7 @@ export default {
               post_url
               thumbnail_url
               id
+              id_string
               liked
               summary
               timestamp
@@ -139,8 +138,8 @@ export default {
         // Use vue reactive properties here
         return {
           num: (this.$route.params.page * 1 - 1) * 10,
-          limit: "10",
-          method: "offset"
+          limit: 10,
+          method: "offset",
         };
       },
       fetchPolicy: "network-only",
@@ -166,10 +165,10 @@ export default {
       // loadingKey is the name of the data property
       // that will be incremented when the query is loading
       // and decremented when it no longer is.
-      loadingKey: "loadingQueriesCount"
+      loadingKey: "loadingQueriesCount",
       // watchLoading will be called whenever the loading state changes
-    }
-  }
+    },
+  },
 };
 </script>
 

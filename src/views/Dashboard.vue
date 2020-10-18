@@ -6,17 +6,20 @@
 
     <!-- Error -->
     <div v-else-if="this.error" class="error apollo">
-      <a-card style="width: 100%;padding-top: 10px; height: 100%">
+      <a-card style="width: 100%; padding-top: 10px; height: 100%">
         <a-alert type="error" message="An error occured" showIcon />
       </a-card>
     </div>
     <!-- Result -->
     <div v-else-if="!$apollo.queries.Dashboard.loading" class="result apollo">
       <a-affix :offsetTop="50">
-        <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
+        <a-card style="min-width: 100%; padding-top: 10px; height: 85px">
           <a-row>
             <a-col :span="6">
-              <a-radio-group @change="onChangeFilter" :defaultValue="$route.params.filter">
+              <a-radio-group
+                @change="onChangeFilter"
+                :defaultValue="$route.params.filter"
+              >
                 <a-radio-button value="all">All</a-radio-button>
                 <a-radio-button value="photo">Photos only</a-radio-button>
                 <a-radio-button value="video">Video only</a-radio-button>
@@ -25,7 +28,7 @@
             </a-col>
             <a-col :span="10" :offset="2">
               <a-pagination
-                :showTotal="total => `Total ${total} Pages`"
+                :showTotal="(total) => `Total ${total} Pages`"
                 :pageSize="1"
                 :current="$route.params.page * 1"
                 :defaultCurrent="$route.params.page * 1 - 1"
@@ -94,7 +97,7 @@ export default {
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1,
       tstamp: "",
-      Dashboard: {}
+      Dashboard: {},
     };
   },
   methods: {
@@ -109,7 +112,7 @@ export default {
       if (this.$route.params.filter !== "all") {
         this.var1 = {
           num: (this.$route.params.page * 1 - 1) * 20,
-          method: this.$route.params.filter
+          method: this.$route.params.filter,
         };
       }
       if (this.$route.params.filter === "all") {
@@ -124,8 +127,8 @@ export default {
         params: {
           page: pageNumber,
           filter: this.$route.params.filter,
-          User: this.blog1
-        }
+          User: this.blog1,
+        },
       });
     },
     onChange1() {
@@ -140,10 +143,10 @@ export default {
         params: {
           page: this.$route.params.page * 1,
           filter: data.target.value,
-          User: this.blog1
-        }
+          User: this.blog1,
+        },
       });
-    }
+    },
   },
   apollo: {
     // Advanced query with parameters
@@ -202,7 +205,7 @@ export default {
         // Use vue reactive properties here
         return {
           num: (this.$route.params.page * 1 - 1) * 10,
-          method: this.$route.params.filter
+          method: this.$route.params.filter,
         };
       },
       fetchPolicy: "network-only",
@@ -226,9 +229,9 @@ export default {
       // loadingKey is the name of the data property
       // that will be incremented when the query is loading
       // and decremented when it no longer is.
-      loadingKey: "loadingQueriesCount"
+      loadingKey: "loadingQueriesCount",
       // watchLoading will be called whenever the loading state changes
-    }
+    },
   },
   // eslint-disable-next-line
   mounted: function() {
@@ -242,11 +245,11 @@ export default {
       this.checkfilter();
       // eslint-disable-next-line
       console.log(this.$route.params);
-    }
+    },
   },
   components: {
-    CardPics
-  }
+    CardPics,
+  },
 };
 </script>
 <style scoped>

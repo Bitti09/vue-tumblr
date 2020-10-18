@@ -8,27 +8,27 @@
       style="height: 15rem"
     />
     <ul class="ant-card-actions" slot="actions">
-      <li style="width: 33%;">
+      <li style="width: 33%">
         <a-icon v-if="!video" type="picture" />
         <a-icon v-if="video" type="video-camera" />
         {{ piccount }}
       </li>
-      <li style="width: 33%;">
+      <li style="width: 33%">
         <a-icon type="message" />
         {{ notecount }}
       </li>
-      <li style="width: 33%;">
+      <li style="width: 33%">
         <router-link :to="vars">
           <a-icon type="caret-right" />Details
         </router-link>
       </li>
     </ul>
     <ul class="time ant-card-actions">
-      <li style="width: 70%;">
+      <li style="width: 70%">
         <a-icon type="clock-circle-o" />
         Posted {{ this.timen1 }}
       </li>
-      <li style="width: 30%;">
+      <li style="width: 30%">
         <a-icon v-if="this.liked" @click="checklike()" type="heart" />
         <a-icon v-if="!this.liked" @click="checklike()" type="heart-o" />
       </li>
@@ -66,28 +66,28 @@ export default {
     "summary",
     "reblogkey",
     "timestamp",
-    "video"
+    "video",
   ],
   data() {
     return {
-      timen1: this.$moment(this.timestamp * 1000).fromNow()
+      timen1: this.$moment(this.timestamp * 1000).fromNow(),
     };
   },
   computed: {
     vars() {
       var x = {
         name: "PostDetail",
-        params: { Postid: this.postid, User: this.blogname, page: 1 }
+        params: { Postid: this.postid, User: this.blogname, page: 1 },
       };
       return x;
     },
     vars2() {
       var x = {
         name: "BlogPosts",
-        params: { User: this.blogname, page: "1", filter: "all" }
+        params: { User: this.blogname, page: "1", filter: "all" },
       };
       return x;
-    }
+    },
   },
   methods: {
     checklike() {
@@ -110,16 +110,16 @@ export default {
           mutation: POST_DISLIKE,
           variables: {
             id,
-            reblog_key
+            reblog_key,
           },
           optimisticResponse: {
             __typename: "Mutation",
             UnlikePost: {
               __typename: "Like",
               reblog_key,
-              id
-            }
-          }
+              id,
+            },
+          },
         });
       } catch (e) {
         //console.error(e);
@@ -134,16 +134,16 @@ export default {
           mutation: POST_LIKE,
           variables: {
             id,
-            reblog_key
+            reblog_key,
           },
           optimisticResponse: {
             __typename: "Mutation",
             LikePost: {
               __typename: "Like",
               reblog_key,
-              id
-            }
-          }
+              id,
+            },
+          },
         });
       } catch (e) {
         //console.error(e);
@@ -152,7 +152,7 @@ export default {
     },
     refresh1() {
       //console.log(this.$parent);
-    }
-  }
+    },
+  },
 };
 </script>

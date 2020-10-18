@@ -13,7 +13,6 @@ import i18n from "./i18n";
 import VueDPlayer from "vue-dplayer";
 import "vue-dplayer/dist/vue-dplayer.css";
 import VuePlyr from "vue-plyr";
-import "vue-plyr/dist/vue-plyr.css";
 import VModal from "vue-js-modal";
 
 Vue.use(VModal);
@@ -21,7 +20,7 @@ Vue.use(VuePlyr);
 Vue.use(VueImg);
 Vue.use(Antd);
 Vue.use(VueMoment, {
-  moment
+  moment,
 });
 Vue.use(VueDPlayer);
 Vue.config.productionTip = false;
@@ -31,5 +30,5 @@ new Vue({
   store,
   provide: createProvider().provide(),
   i18n,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
