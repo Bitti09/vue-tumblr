@@ -1,8 +1,8 @@
 <template>
-  <div style="width: 100%;max-width: 100%;max-height: 600px">
+  <div style="width: 100%; max-width: 100%; max-height: 600px">
     <a-card>
       <d-player
-        style="width: 100%;max-width: 100%;max-height: 600px;height: 600px"
+        style="width: 100%; max-width: 100%; max-height: 600px; height: 600px"
         v-if="this.videotype !== 'youtube'"
         :options="options1"
       ></d-player>
@@ -34,37 +34,31 @@ export default {
     return {
       test: "test",
       options: {
-        video: { url: this.vidSrc, pic: this.imgSrc }
+        video: { url: this.vidSrc, pic: this.imgSrc },
       },
-      x: this.vidSrc2
-        .replace(/\/$/, "")
-        .split("=")
-        .pop()
+      x: this.vidSrc2.replace(/\/$/, "").split("=").pop(),
     };
   },
   computed: {
     options1() {
       var video = {
         url: this.vidSrc,
-        pic: this.imgSrc
+        pic: this.imgSrc,
       };
       var options = {
-        video: video
+        video: video,
       };
       return options;
     },
     vidurl() {
       if (this.vidSrc2) {
-        var x = this.vidSrc2
-          .replace(/\/$/, "")
-          .split("=")
-          .pop();
+        var x = this.vidSrc2.replace(/\/$/, "").split("=").pop();
         var y = "https://www.youtube.com/embed/" + x;
         return y;
       } else {
         return "-";
       }
-    }
-  }
+    },
+  },
 };
 </script>

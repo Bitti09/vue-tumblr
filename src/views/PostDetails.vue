@@ -7,7 +7,7 @@
     </div>
     <!-- Error -->
     <div v-else-if="this.error" class="error apollo">
-      <a-card style="width: 100%;padding-top: 10px; height: 100%">
+      <a-card style="width: 100%; padding-top: 10px; height: 100%">
         <a-alert type="error" message="An error occured" showIcon />
       </a-card>
     </div>
@@ -18,22 +18,27 @@
       style="padding-top: 38px"
     >
       <a-card
-        style="width: 100%;margin-top:10px"
+        style="width: 100%; margin-top: 10px"
         :title="this.BlogPosts.blog.title"
       >
         <a-row
           type="flex"
           justify="start"
           align="top"
-          style="width: 105.7%;margin-top:-24px;left:-32px;position:relative;"
+          style="
+            width: 105.7%;
+            margin-top: -24px;
+            left: -32px;
+            position: relative;
+          "
         >
-          <a-card style="width: 50%;height: 140.233px" title="Post Summary:">
+          <a-card style="width: 50%; height: 140.233px" title="Post Summary:">
             <span v-if="this.BlogPosts.posts['0'].summary">{{
               this.BlogPosts.posts["0"].summary
             }}</span>
             <span v-else>No Summary</span>
           </a-card>
-          <a-card style="width: 50%;height: 140.233px" title="Posted  on:">
+          <a-card style="width: 50%; height: 140.233px" title="Posted  on:">
             <span>{{
               this.BlogPosts.posts["0"].timestamp | moment("DD.MM.YYYY HH:MM")
             }}</span>
@@ -43,7 +48,12 @@
         </a-row>
         <br />
         <a-card
-          style="width: 105.7%;margin-top:0px;left:-32px;position:relative;"
+          style="
+            width: 105.7%;
+            margin-top: 0px;
+            left: -32px;
+            position: relative;
+          "
           title="Post Caption:"
         >
           <p
@@ -57,17 +67,18 @@
       <a-row type="flex" justify="start" align="top">
         <!-- Pic Cards -->
         <div v-if="this.BlogPosts.posts['0'].photos">
-          <div
-            v-for="(post, index, length) in this.BlogPosts.posts['0'].photos"
+          <span
+            v-for="(post, index) in this.BlogPosts.posts['0'].photos"
             :key="post.index"
           >
-            {{ length }}
-            <CardPicDetails
-              :img-src="post.original_size.url"
-              :index1="index"
-              :index2="piccount()"
-            ></CardPicDetails>
-          </div>
+            <a-col :xl="6">
+              <CardPicDetails
+                :img-src="post.original_size.url"
+                :index1="index"
+                :index2="piccount()"
+              ></CardPicDetails>
+            </a-col>
+          </span>
         </div>
       </a-row>
       <!-- Vid Cards -->
@@ -106,12 +117,13 @@ import gql from "graphql-tag";
 
 export default {
   data() {
+    props: ["name"];
     return {
       BlogPosts: {},
       blog1: this.$route.params.User,
       page1: this.$route.params.page * 1 - 1,
       blogname: this.$route.params.User,
-      error: 0
+      error: 0,
     };
   },
   methods: {
@@ -126,13 +138,13 @@ export default {
     piccount() {
       const val = this.BlogPosts.posts["0"].photos.length;
       return val;
-    }
+    },
   },
   components: {
     CardVidDetails,
     CardPicDetails,
     CardTagDetails,
-    CardNoteDetails
+    CardNoteDetails,
   },
   apollo: {
     // Advanced query with parameters
@@ -141,13 +153,13 @@ export default {
       query: gql`
         query BlogPosts(
           $blogname: String
-          $postid: Float
+          $id_string: String
           $notes_info: Boolean
           $reblog_info: Boolean
         ) {
           BlogPosts(
             blog_name: $blogname
-            id: $postid
+            id_string: $id_string
             notes_info: $notes_info
             reblog_info: $reblog_info
           ) {
@@ -163,6 +175,8 @@ export default {
               timestamp
               liked
               caption
+              id_string
+              id
               reblog_key
               video_type
               permalink_url
@@ -192,9 +206,9 @@ export default {
         // Use vue reactive properties here
         return {
           blogname: this.$route.params.User,
-          postid: this.$route.params.Postid,
+          id_string: this.$route.params.Postid,
           notes_info: true,
-          reblog_info: true
+          reblog_info: true,
         };
       },
       fetchPolicy: "network-only",
@@ -220,10 +234,10 @@ export default {
       // loadingKey is the name of the data property
       // that will be incremented when the query is loading
       // and decremented when it no longer is.
-      loadingKey: "loadingQueriesCount"
+      loadingKey: "loadingQueriesCount",
       // watchLoading will be called whenever the loading state changes
-    }
-  }
+    },
+  },
 };
 </script>
 

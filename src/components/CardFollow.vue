@@ -1,10 +1,10 @@
 <template>
-  <a-card style="width: 15rem;max-height:200.312px;min-height:200.312px">
+  <a-card style="width: 15rem; max-height: 200.312px; min-height: 200.312px">
     <a-card-meta :title="blog_name" :description="this.timen1">
       <a-avatar slot="avatar" :src="this.avatar" />
     </a-card-meta>
     <template class="ant-card-actions" slot="actions">
-      <li style="width: 100%;">
+      <li style="width: 100%">
         <router-link :to="varblog">
           Blog Posts
           <a-icon type="caret-right" color="grey" />
@@ -45,22 +45,22 @@ export default {
     "blog_name",
     "summary",
     "timestamp",
-    "publicfollow"
+    "publicfollow",
   ],
   data() {
     return {
       avatar: `https://api.tumblr.com/v2/blog/${this.blog_name}.tumblr.com/avatar/40`,
-      timen1: this.$moment(this.timestamp * 1000).fromNow()
+      timen1: this.$moment(this.timestamp * 1000).fromNow(),
     };
   },
   computed: {
     varblog() {
       var x = {
         name: "BlogPosts",
-        params: { User: this.blog_name, page: "1", filter: "all" }
+        params: { User: this.blog_name, page: "1", filter: "all" },
       };
       return x;
-    }
-  }
+    },
+  },
 };
 </script>

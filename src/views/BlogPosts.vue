@@ -7,14 +7,14 @@
     </div>
     <!-- Error -->
     <div v-else-if="this.error" class="error apollo">
-      <a-card style="width: 100%;padding-top: 10px; height: 100%">
+      <a-card style="width: 100%; padding-top: 10px; height: 100%">
         <a-alert type="error" message="An error occured" showIcon />
       </a-card>
     </div>
     <!-- Result -->
     <div v-else-if="this.BlogPosts" class="result apollo">
       <a-affix :offsetTop="50">
-        <a-card style="min-width: 100%;padding-top: 10px; height: 85px">
+        <a-card style="min-width: 100%; padding-top: 10px; height: 85px">
           <a-row>
             <a-col :span="8">
               <a-radio-group
@@ -29,7 +29,7 @@
             </a-col>
             <a-col :span="12" :offset="-1">
               <a-pagination
-                :showTotal="total => `Total ${total} Pages`"
+                :showTotal="(total) => `Total ${total} Pages`"
                 :pageSize="1"
                 :current="$route.params.page * 1"
                 :defaultCurrent="$route.params.page * 1 - 1"
@@ -46,14 +46,14 @@
           </a-row>
         </a-card>
       </a-affix>
-      <a-card style="width: 100%, marginTop: '54px">
+      <a-card style="width: 100%; margintop: 54px">
         <a-card style="width: 100%" :title="this.BlogPosts.blog.title"></a-card>
         <a-row type="flex" justify="start" align="top">
-          <a-card style="width: 20%;height: 189.233px" title="Blog Name:">
+          <a-card style="width: 20%; height: 189.233px" title="Blog Name:">
             <span>{{ this.BlogPosts.blog.name }}</span>
           </a-card>
           <a-card
-            style="width: 20%;height: 189.233px"
+            style="width: 20%; height: 189.233px"
             title="Last Updated  on:"
           >
             <span>
@@ -63,7 +63,7 @@
             <span>~ {{ tago(this.BlogPosts.blog.updated) }}</span>
           </a-card>
           <a-card
-            style="width: 20%;height: 189.233px"
+            style="width: 20%; height: 189.233px"
             title="Total No of Posts:"
           >
             <span>{{ this.BlogPosts.total_posts }}</span>
@@ -72,7 +72,7 @@
             <br />
           </a-card>
           <a-card
-            style="width: 40%;height: 189.233px"
+            style="width: 40%; height: 189.233px"
             :title="blogshare(this.BlogPosts.blog.name)"
           >
             <span v-if="this.BlogPosts.blog.share_likes">
@@ -106,7 +106,7 @@
               :notecount="post.note_count"
               :piccount="post.photos.length"
               :liked="post.liked"
-              :postid="post.id"
+              :postid="post.id_string"
               :var1="var11"
               :reblogkey="post.reblog_key"
               :blogname="post.blog_name"
@@ -121,7 +121,7 @@
               :notecount="post.note_count"
               :piccount="1"
               :liked="post.liked"
-              :postid="post.id"
+              :postid="post.id_string"
               :var1="var11"
               :reblogkey="post.reblog_key"
               :blogname="post.blog_name"
@@ -171,13 +171,13 @@ export default {
       blogname: this.$route.params.User,
       var1: {
         num: (this.$route.params.page * 1 - 1) * 20,
-        blogname: this.$route.params.User
+        blogname: this.$route.params.User,
       },
       errormsg: `${this.$route.params.User} has no public liked Posts`,
       successmsg1: `${this.$route.params.User} has public liked Posts `,
       successmsg2:
         "Note: currently you can only see the recent 1000 Posts via this Site",
-      successmsg3: `GoTo ${this.$route.params.User} 's liked Posts`
+      successmsg3: `GoTo ${this.$route.params.User} 's liked Posts`,
     };
   },
   methods: {
@@ -206,8 +206,8 @@ export default {
         params: {
           page: 1 * 1,
           filter: data.target.value,
-          User: this.$route.params.User
-        }
+          User: this.$route.params.User,
+        },
       });
     },
     checkfilter() {
@@ -215,13 +215,13 @@ export default {
         this.var1 = {
           num: (this.$route.params.page * 1 - 1) * 20,
           filter: this.$route.params.filter,
-          blogname: this.$route.params.User
+          blogname: this.$route.params.User,
         };
       }
       if (this.$route.params.filter === "all") {
         this.var1 = {
           num: (this.$route.params.page * 1 - 1) * 20,
-          blogname: this.$route.params.User
+          blogname: this.$route.params.User,
         };
       }
     },
@@ -232,8 +232,8 @@ export default {
         params: {
           page: pageNumber,
           filter: this.$route.params.filter,
-          User: this.$route.params.User
-        }
+          User: this.$route.params.User,
+        },
       });
     },
     roundnumber(value, value2) {
@@ -251,7 +251,7 @@ export default {
     test11(value) {
       const val = _.sortBy(value, "timestamp").reverse();
       return val;
-    }
+    },
   },
   // eslint-disable-next-line
   mounted: function() {
@@ -291,6 +291,7 @@ export default {
                   thumbnail_url
                   video_url
                   id
+                  id_string
                   photos {
                     original_size {
                       url
@@ -330,6 +331,7 @@ export default {
                   thumbnail_url
                   video_url
                   id
+                  id_string
                   photos {
                     original_size {
                       url
@@ -348,7 +350,7 @@ export default {
         return {
           blogname: this.$route.params.User,
           num: (this.$route.params.page * 1 - 1) * 20,
-          filter: this.$route.params.filter
+          filter: this.$route.params.filter,
         };
       },
       fetchPolicy: "network-only",
@@ -372,9 +374,9 @@ export default {
       // loadingKey is the name of the data property
       // that will be incremented when the query is loading
       // and decremented when it no longer is.
-      loadingKey: "loadingQueriesCount"
+      loadingKey: "loadingQueriesCount",
       // watchLoading will be called whenever the loading state changes
-    }
+    },
   },
   computed: {
     vars() {
@@ -384,31 +386,31 @@ export default {
           User: this.$route.params.User,
           page: "1",
           tstamp: "0",
-          filter: "all"
-        }
+          filter: "all",
+        },
       };
       return x;
     },
     var11() {
       var var1 = {
         num: (this.$route.params.page * 1 - 1) * 10,
-        blogname: this.$route.params.User
+        blogname: this.$route.params.User,
       };
       return var1;
     },
     pagenum() {
       return this.$route.params.page * 1 - 1;
-    }
+    },
   },
   watch: {
     // eslint-disable-next-line
     "$route.params": function(newVal, oldVal) {
       this.checkfilter();
-    }
+    },
   },
   components: {
-    CardBlogPics
-  }
+    CardBlogPics,
+  },
 };
 </script>
 

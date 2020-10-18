@@ -13,77 +13,86 @@ export default new Router({
   routes: [
     {
       path: "/Following/",
-      redirect: "/Following/1"
+      redirect: "/Following/1",
     },
     {
       path: "/Following/:page",
       name: "Following",
       component: UserFollowing,
-      props: false
+      props: false,
     },
     {
       path: "/Dashboard/:filter/",
-      redirect: "/Dashboard/:filter/1"
+      redirect: "/Dashboard/:filter/1",
     },
     {
       path: "/Dashboard/:filter/:page",
       name: "Dashboard",
       component: Dashboard,
-      props: false
+      props: false,
     },
     {
       path: "/PostDetail/:User/:Postid/",
-      redirect: "/PostDetail/:User/:Postid/1"
+      redirect: "/PostDetail/:User/:Postid/1",
+      props(route) { // we keep the params.id Type from changing when entered from url
+        let props = { ...route.params }
+        console.log(props)
+        props.Postid = parseFloat(props.Postid)
+        return props
+      },
     },
     {
       path: "/PostDetail/:User/:Postid/:page",
       name: "PostDetail",
       component: PostDetails,
-      props: false
-    },
+      props(route) { // we keep the params.id Type from changing when entered from url
+        let props = { ...route.params }
+        props.Postid = parseFloat(props.Postid)
+        return props
+      },    },
     {
       path: "/BlogPosts/:User/",
-      redirect: "/BlogPosts/:User/all/0"
+      redirect: "/BlogPosts/:User/all/0",
     },
     {
       path: "/BlogPosts/:User/:filter/",
-      redirect: "/BlogPosts/:User/:filter/1"
+      redirect: "/BlogPosts/:User/:filter/1",
     },
     {
       path: "/BlogPosts/:User/:filter/:page",
       name: "BlogPosts",
       component: BlogPosts,
-      props: false
+      props: false,
     },
     {
       path: "/BlogLikes/:User/",
-      redirect: "/BlogLikes/:User/1/"
+      redirect: "/BlogLikes/:User/1/",
     },
     {
       path: "/BlogLikes/:User/:page/",
       name: "BlogLikes",
       component: BlogLikes,
-      props: true
+      props: true,
     },
     {
       path: "/",
-      redirect: "/1/"
+      redirect: "/1/",
     },
     {
       path: "/:page/",
       name: "Home",
       component: Home,
-      props: false
+      props: false,
     },
     {
       path: "*",
-      redirect: "/"
-    }
+      redirect: "/",
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
     }
     return { x: 0, y: 0 };
-  }
+  },
 });

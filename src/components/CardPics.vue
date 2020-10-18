@@ -14,27 +14,30 @@
       :src="picurl"
       slot="cover"
       style="height: 15rem"
-      @click="show(postid.toString())"
+      @click="show(postid1)"
     />
-    <modal v-if="video" height="60%" :name="postid.toString()">
-      <d-player style="width: 100%;height: 100%" :options="options1"></d-player>
+    <modal v-if="video" height="60%" :name="postid1">
+      <d-player
+        style="width: 100%; height: 100%"
+        :options="options1"
+      ></d-player>
     </modal>
     <template class="ant-card-actions" slot="actions">
-      <li v-if="!video" style="width: 25%;">
+      <li v-if="!video" style="width: 25%">
         <a-icon type="picture" />
         {{ piccount }}
       </li>
-      <li v-else style="width: 25%;"><a-icon type="video-camera" />1</li>
-      <li style="width: 25%;">
+      <li v-else style="width: 25%"><a-icon type="video-camera" />1</li>
+      <li style="width: 25%">
         <a-icon v-if="this.liked" @click="checklike()" type="heart" />
         <a-icon v-if="!this.liked" @click="checklike()" type="heart-o" />
       </li>
-      <li style="width: 25%;">
+      <li style="width: 25%">
         <router-link :to="vardetail">
           <a-icon type="caret-right" />Details
         </router-link>
       </li>
-      <li style="width: 25%;">
+      <li style="width: 25%">
         <router-link :to="varblog">
           <a-icon type="caret-right" />Blog
         </router-link>
@@ -45,7 +48,7 @@
     </a-card-meta>
     <br />
     <div v-if="summary" style="height: 6rem">
-      <span style="overflow-wrap: break-word;">{{ summary }}</span>
+      <span style="overflow-wrap: break-word">{{ summary }}</span>
     </div>
     <div v-if="!summary" style="height: 6rem">
       <p>...</p>
@@ -63,18 +66,18 @@ export default {
     "notecount",
     "piccount",
     "liked",
-    "postid",
+    "postid1",
     "reblogkey",
     "blogname",
     "summary",
     "timestamp",
     "video",
-    "videourl"
+    "videourl",
   ],
   data() {
     return {
       avatar: `https://api.tumblr.com/v2/blog/${this.blogname}.tumblr.com/avatar/128`,
-      time1: ""
+      time1: "",
     };
   },
   methods: {
@@ -98,88 +101,38 @@ export default {
         this.$emit("enlarge-text");
       }
     },
-    dislikepost() {
-      const id = this.postid * 1;
-      const reblog_key = this.reblogkey;
-      try {
-        this.$apollo.mutate({
-          mutation: POST_DISLIKE,
-          variables: {
-            id,
-            reblog_key
-          },
-          optimisticResponse: {
-            __typename: "Mutation",
-            UnlikePost: {
-              __typename: "Like",
-              reblog_key,
-              id
-            }
-          }
-        });
-      } catch (e) {
-        // eslint-disable-next-line
-        console.error(e);
-        //this.label = label
-      }
-    },
-    likepost() {
-      const id = this.postid * 1;
-      const reblog_key = this.reblogkey;
-      try {
-        this.$apollo.mutate({
-          mutation: POST_LIKE,
-          variables: {
-            id,
-            reblog_key
-          },
-          optimisticResponse: {
-            __typename: "Mutation",
-            LikePost: {
-              __typename: "Like",
-              reblog_key,
-              id
-            }
-          }
-        });
-      } catch (e) {
-        // eslint-disable-next-line
-        console.error(e);
-        //this.label = label
-      }
-    },
     refresh1() {
       // eslint-disable-next-line
       console.log(this.$parent);
-    }
+    },
   },
   computed: {
     options1() {
       var video = {
-        url: this.videourl
+        url: this.videourl,
       };
       var options = {
-        video: video
+        video: video,
       };
       return options;
     },
     vardetail() {
       var x = {
         name: "PostDetail",
-        params: { Postid: this.postid, User: this.blogname, page: "1" }
+        params: { Postid: this.postid1, User: this.blogname, page: "1" },
       };
       return x;
     },
     varblog() {
       var x = {
         name: "BlogPosts",
-        params: { User: this.blogname, page: "1", filter: "all" }
+        params: { User: this.blogname, page: "1", filter: "all" },
       };
       return x;
-    }
+    },
   },
   mounted() {
     this.time1 = this.$moment(this.timestamp * 1000).fromNow();
-  }
+  },
 };
 </script>

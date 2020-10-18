@@ -1,15 +1,14 @@
 <template>
-<a-card
-  hoverable
-    style="width: 25rem">
-  <img
-    alt="Pic Loading..."
-    v-img:name
-    :src="imgSrc"
-    slot="cover"
-    style="height: 15rem"/>
-      <small >Image  {{index1+1}} of {{index2}}</small>
-</a-card>
+  <a-card hoverable style="width: 25rem">
+    <img
+      alt="Pic Loading..."
+      v-img:name
+      :src="imgSrc"
+      slot="cover"
+      style="height: 15rem"
+    />
+    <small>Image {{ index1 + 1 }} of {{ index2 }}</small>
+  </a-card>
 </template>
 <style scoped>
 .card-body {
@@ -37,6 +36,6 @@
 </style>
 <script>
 export default {
-  props: ["img-src", "index2", "index1"]
+  props: ["img-src", "index2", "index1", "postid1"],
 };
 </script>
