@@ -7,5 +7,8 @@ module.exports = {
 
   pwa: {
     name: "Vue Tumblr Viewer"
-  }
+  },
+  devServer: {
+		disableHostCheck: true,
+	}
 };

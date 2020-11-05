@@ -139,7 +139,7 @@ export default {
         // Use vue reactive properties here
         return {
           num: (this.$route.params.page * 1 - 1) * 10,
-          limit: "10",
+          limit: 10,
           method: "offset"
         };
       },
